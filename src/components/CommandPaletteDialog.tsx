@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import {
   Bot,
   Focus,
+  Keyboard,
   LayoutGrid,
   MoonStar,
   Search,
@@ -24,6 +25,7 @@ interface CommandPaletteDialogProps {
   focusMode: boolean;
   onClose: () => void;
   onOpenSettings: () => void;
+  onOpenKeyboard: () => void;
   onAddShortcut: () => void;
   onCycleTheme: () => void;
   onToggleFocus: () => void;
@@ -36,6 +38,7 @@ export function CommandPaletteDialog({
   focusMode,
   onClose,
   onOpenSettings,
+  onOpenKeyboard,
   onAddShortcut,
   onCycleTheme,
   onToggleFocus,
@@ -57,12 +60,13 @@ export function CommandPaletteDialog({
 
   const actions = useMemo<PaletteAction[]>(() => [
     { id: 'settings', label: 'Open settings', detail: 'Preferences and privacy', icon: Settings, run: onOpenSettings },
+    { id: 'keyboard', label: 'Keyboard shortcuts', detail: 'Learn every shortcut', icon: Keyboard, run: onOpenKeyboard },
     { id: 'shortcut', label: 'Add shortcut', detail: 'Create a quick destination', icon: LayoutGrid, run: onAddShortcut },
     { id: 'ai', label: 'Switch to AI', detail: 'Focus the command bar', icon: Bot, run: onSwitchAi },
     { id: 'search', label: 'Switch to Search', detail: 'Focus the command bar', icon: Search, run: onSwitchSearch },
     { id: 'focus', label: focusMode ? 'Leave Focus Mode' : 'Enter Focus Mode', detail: 'Show only the command bar', icon: Focus, run: onToggleFocus },
     { id: 'theme', label: 'Change theme', detail: `Currently ${theme}`, icon: theme === 'dark' ? SunMedium : MoonStar, run: onCycleTheme },
-  ], [focusMode, onAddShortcut, onCycleTheme, onOpenSettings, onSwitchAi, onSwitchSearch, onToggleFocus, theme]);
+  ], [focusMode, onAddShortcut, onCycleTheme, onOpenKeyboard, onOpenSettings, onSwitchAi, onSwitchSearch, onToggleFocus, theme]);
 
   const filtered = actions.filter((action) => `${action.label} ${action.detail}`.toLowerCase().includes(query.toLowerCase()));
   const selectedIndex = filtered.length ? activeIndex % filtered.length : 0;

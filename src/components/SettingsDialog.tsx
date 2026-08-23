@@ -14,7 +14,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { aiProviders, searchEngines } from '../data/catalog';
+import { aiProviders, MAX_QUICK_LINKS, searchEngines } from '../data/catalog';
 import type {
   Accent,
   AiProviderId,
@@ -239,9 +239,9 @@ export function SettingsDialog({
                     </button>
                   ))}
                 </div>
-                <button type="button" className="secondary-button full-width" onClick={onAddShortcut} disabled={quickLinks.length >= 12}>
+                <button type="button" className="secondary-button full-width" onClick={onAddShortcut} disabled={quickLinks.length >= MAX_QUICK_LINKS}>
                   <Plus aria-hidden="true" size={16} />
-                  {quickLinks.length >= 12 ? 'Maximum of 12 shortcuts reached' : 'Add shortcut'}
+                  {quickLinks.length >= MAX_QUICK_LINKS ? `Maximum of ${MAX_QUICK_LINKS} shortcuts reached` : 'Add shortcut'}
                 </button>
               </SettingsPane>
             )}

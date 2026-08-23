@@ -20,6 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
 import { GripHorizontal, MoreHorizontal, Plus } from 'lucide-react';
+import { MAX_QUICK_LINKS } from '../data/catalog';
 import type { QuickLink } from '../types';
 import { BrandIcon } from './BrandIcon';
 
@@ -155,12 +156,14 @@ export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLin
               </motion.div>
             ))}
           </SortableContext>
-          <div className="quick-link add-link">
-            <button type="button" className="quick-link-main" onClick={onAdd} aria-label="Add quick link">
-              <span className="quick-link-icon"><Plus aria-hidden="true" size={21} strokeWidth={1.6} /></span>
-              <span className="quick-link-name">Add</span>
-            </button>
-          </div>
+          {links.length < MAX_QUICK_LINKS && (
+            <div className="quick-link add-link">
+              <button type="button" className="quick-link-main" onClick={onAdd} aria-label="Add quick link">
+                <span className="quick-link-icon"><Plus aria-hidden="true" size={21} strokeWidth={1.6} /></span>
+                <span className="quick-link-name">Add</span>
+              </button>
+            </div>
+          )}
         </div>
         <DragOverlay dropAnimation={{ duration: 180, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }}>
           {activeLink ? <QuickLinkTile link={activeLink} lifted /> : null}

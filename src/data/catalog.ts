@@ -5,6 +5,8 @@ import type {
   SearchEngineId,
 } from '../types';
 
+export const MAX_QUICK_LINKS = 12;
+
 export const aiProviders: Record<AiProviderId, Destination> = {
   chatgpt: {
     id: 'chatgpt',

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
-import { defaultQuickLinks } from '../data/catalog';
+import { defaultQuickLinks, MAX_QUICK_LINKS } from '../data/catalog';
 import type { NovaSettings, QuickLink, RecentItem } from '../types';
 
 const defaultSettings: NovaSettings = {
@@ -72,7 +72,7 @@ export const useNovaStore = create<NovaState>()(
       updateSettings: (next) =>
         set((state) => ({ settings: { ...state.settings, ...next } })),
       addQuickLink: (link) =>
-        set((state) => ({ quickLinks: [...state.quickLinks, link].slice(0, 12) })),
+        set((state) => ({ quickLinks: [...state.quickLinks, link].slice(0, MAX_QUICK_LINKS) })),
       updateQuickLink: (link) =>
         set((state) => ({
           quickLinks: state.quickLinks.map((item) => (item.id === link.id ? link : item)),

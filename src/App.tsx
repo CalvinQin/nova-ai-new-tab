@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { Command, CornerDownLeft } from 'lucide-react';
 import { CommandBar } from './components/CommandBar';
 import { CommandPaletteDialog } from './components/CommandPaletteDialog';
@@ -10,6 +10,7 @@ import { SettingsDialog, type SettingsSection } from './components/SettingsDialo
 import { ShortcutDialog } from './components/ShortcutDialog';
 import { Toast, type ToastState } from './components/Toast';
 import { TopBar } from './components/TopBar';
+import { MAX_QUICK_LINKS } from './data/catalog';
 import { useTheme } from './hooks/useTheme';
 import type { LocalCommand, ResolvedAction } from './lib/command';
 import { useNovaStore } from './store/useNovaStore';
@@ -109,7 +110,7 @@ export default function App() {
 
   const handleLocalCommand = useCallback((command: LocalCommand) => {
     if (command === 'settings') setSettingsSection('general');
-    if (command === 'apps') setEditingShortcut('new');
+    if (command === 'apps') setSettingsSection('shortcuts');
     if (command === 'theme') cycleTheme();
     if (command === 'focus') toggleFocus();
     if (command === 'palette') setPaletteOpen(true);
@@ -167,12 +168,25 @@ export default function App() {
     if (item.safeUrl) window.location.assign(item.safeUrl);
   }, []);
 
+  const openNewShortcut = useCallback(() => {
+    if (quickLinks.length >= MAX_QUICK_LINKS) {
+      showToast(`Maximum of ${MAX_QUICK_LINKS} shortcuts reached.`);
+      return;
+    }
+    setEditingShortcut('new');
+  }, [quickLinks.length, showToast]);
+
   const saveShortcut = useCallback((link: QuickLink) => {
-    if (editingShortcut === 'new') addQuickLink(link);
-    else updateQuickLink(link);
+    if (editingShortcut === 'new') {
+      if (quickLinks.length >= MAX_QUICK_LINKS) {
+        showToast(`Maximum of ${MAX_QUICK_LINKS} shortcuts reached.`);
+        return;
+      }
+      addQuickLink(link);
+    } else updateQuickLink(link);
     setEditingShortcut(null);
     showToast(editingShortcut === 'new' ? `${link.name} added.` : `${link.name} updated.`);
-  }, [addQuickLink, editingShortcut, showToast, updateQuickLink]);
+  }, [addQuickLink, editingShortcut, quickLinks.length, showToast, updateQuickLink]);
 
   const deleteShortcut = useCallback((link: QuickLink) => {
     const index = quickLinks.findIndex((item) => item.id === link.id);
@@ -231,6 +245,7 @@ export default function App() {
   const focusMode = settings.focusMode;
 
   return (
+    <MotionConfig reducedMotion={settings.animations ? 'user' : 'always'}>
     <div className={focusMode ? 'app is-focus-mode' : 'app'}>
       <div className="ambient" aria-hidden="true"><span className="orbital-line" /></div>
 
@@ -293,7 +308,7 @@ export default function App() {
                     onReorder={reorderQuickLinks}
                     onOpen={openQuickLink}
                     onEdit={setEditingShortcut}
-                    onAdd={() => setEditingShortcut('new')}
+                    onAdd={openNewShortcut}
                   />
                 )}
                 {settings.showRecent && (
@@ -333,7 +348,7 @@ export default function App() {
           initialSection={settingsSection}
           onClose={() => setSettingsSection(null)}
           onUpdate={updateSettings}
-          onAddShortcut={() => { setSettingsSection(null); setEditingShortcut('new'); }}
+          onAddShortcut={() => { setSettingsSection(null); openNewShortcut(); }}
           onEditShortcut={(link) => { setSettingsSection(null); setEditingShortcut(link); }}
           onClearRecents={() => { clearRecents(); showToast('Recent destinations cleared.'); }}
         />
@@ -354,7 +369,8 @@ export default function App() {
           focusMode={settings.focusMode}
           onClose={() => setPaletteOpen(false)}
           onOpenSettings={() => setSettingsSection('general')}
-          onAddShortcut={() => setEditingShortcut('new')}
+          onOpenKeyboard={() => setSettingsSection('keyboard')}
+          onAddShortcut={openNewShortcut}
           onCycleTheme={cycleTheme}
           onToggleFocus={toggleFocus}
           onSwitchAi={() => { setMode('ai'); requestAnimationFrame(() => inputRef.current?.focus()); }}
@@ -364,5 +380,6 @@ export default function App() {
 
       <Toast toast={toast} />
     </div>
+    </MotionConfig>
   );
 }

@@ -87,6 +87,7 @@ function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProp
     } else if (event.key === 'Escape') {
       event.preventDefault();
       setOpen(false);
+      requestAnimationFrame(() => rootRef.current?.querySelector('button')?.focus());
     }
   };
 

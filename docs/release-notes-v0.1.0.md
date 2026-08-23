@@ -20,6 +20,6 @@ NOVA 是一款安静、键盘优先的 Chromium 新标签页，把 AI、搜索�
 3. Open `chrome://extensions` and enable Developer mode / 打开扩展程序页面并开启开发者模式。
 4. Choose Load unpacked and select the unzipped folder / 点击“加载已解压的扩展程序”并选择解压目录。
 
-Verification: ESLint passed, 41 automated tests passed, production build succeeded, and `npm audit` reported 0 vulnerabilities.
+Verification: ESLint passed, 42 automated tests passed, production build succeeded, and `npm audit` reported 0 vulnerabilities.
 
-验证结果：ESLint 通过、41 项自动化测试通过、正式构建成功，`npm audit` 为 0 个漏洞。
+验证结果：ESLint 通过、42 项自动化测试通过、正式构建成功，`npm audit` 为 0 个漏洞。

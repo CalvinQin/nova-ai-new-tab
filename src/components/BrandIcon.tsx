@@ -32,7 +32,6 @@ const icons: Partial<Record<BrandIconKey, SimpleIcon>> = {
   grok: siX,
   deepseek: siDeepseek,
   google: siGoogle,
-  bing: siGoogle,
   duckduckgo: siDuckduckgo,
   brave: siBrave,
   youtube: siYoutube,
@@ -111,6 +110,21 @@ export function BrandIcon({ icon, iconUrl, size = 20, className, label }: BrandI
         strokeLinejoin="round"
       >
         <path d="M4.5 7.2h11.7M9.2 3.5 4.5 7.2l4.7 3.7M19.5 16.8H7.8m7 3.7 4.7-3.7-4.7-3.7" />
+      </svg>
+    );
+  }
+
+  if (icon === 'bing') {
+    return (
+      <svg
+        className={className}
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        fill="currentColor"
+      >
+        <path d="M5.6 2.5v14.7l5.35 3.08 7.45-4.3v-4.66l-5.28-3.05 1.92 4.54-4.13 2.38V5.65L5.6 2.5Z" />
       </svg>
     );
   }

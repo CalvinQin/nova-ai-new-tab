@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [观看实机演示](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![测试](https://img.shields.io/badge/tests-41%20passed-4c8b61?style=flat-square)
+  ![测试](https://img.shields.io/badge/tests-42%20passed-4c8b61?style=flat-square)
   ![权限](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
   ![许可证](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -81,7 +81,7 @@ NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式和最近
 
 ```bash
 npm run dev      # 启动 Vite 本地开发
-npm run check    # ESLint + 41 项测试 + 正式构建
+npm run check    # ESLint + 42 项测试 + 正式构建
 npm run icons    # 重新生成扩展图标
 ```
 

@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [Watch the real-browser demo](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![Tests](https://img.shields.io/badge/tests-41%20passed-4c8b61?style=flat-square)
+  ![Tests](https://img.shields.io/badge/tests-42%20passed-4c8b61?style=flat-square)
   ![Permission](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
   ![License](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -81,7 +81,7 @@ NOVA stores settings, quick links, and recent **destination metadata** locally w
 
 ```bash
 npm run dev      # local Vite development
-npm run check    # ESLint + 41 tests + production build
+npm run check    # ESLint + 42 tests + production build
 npm run icons    # regenerate extension icons
 ```
 
