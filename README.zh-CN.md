@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [观看实机演示](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![测试](https://img.shields.io/badge/tests-42%20passed-4c8b61?style=flat-square)
+  ![测试](https://img.shields.io/badge/tests-43%20passed-4c8b61?style=flat-square)
   ![权限](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
   ![许可证](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -32,7 +32,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.0.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.1.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。
@@ -81,12 +81,14 @@ NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式和最近
 
 ```bash
 npm run dev      # 启动 Vite 本地开发
-npm run check    # ESLint + 42 项测试 + 正式构建
+npm run check    # ESLint + 43 项测试 + 正式构建
 npm run icons    # 重新生成扩展图标
 npm run store:assets # 重新生成并校验 Chrome 应用商店素材
 ```
 
 技术栈包括 React、TypeScript、Vite、Zustand、Framer Motion、dnd-kit、Lucide 与 Simple Icons，正式产物遵循 Chrome Manifest V3。
+
+产品流程、组件边界、隐私模型与扩展点见 [架构说明](docs/ARCHITECTURE.md)。
 
 ## 参与贡献
 

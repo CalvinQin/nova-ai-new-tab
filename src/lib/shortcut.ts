@@ -1,4 +1,5 @@
-import type { BrandIconKey } from '../types';
+import { MAX_QUICK_LINKS } from '../data/catalog';
+import type { BrandIconKey, QuickLink } from '../types';
 
 const brandHosts: Array<[RegExp, BrandIconKey]> = [
   [/tradeflowai\.cn$/i, 'tradeflow'],
@@ -46,4 +47,18 @@ export function shortcutMeta(input: string): {
     icon,
     iconUrl: `${url.origin}/favicon.ico`,
   };
+}
+
+export function restoreShortcutAt(
+  links: QuickLink[],
+  link: QuickLink,
+  index: number,
+): QuickLink[] {
+  if (links.length >= MAX_QUICK_LINKS || links.some((item) => item.id === link.id)) {
+    return links;
+  }
+
+  const next = [...links];
+  next.splice(Math.max(0, Math.min(index, next.length)), 0, link);
+  return next;
 }

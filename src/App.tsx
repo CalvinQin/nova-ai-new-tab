@@ -193,6 +193,11 @@ export default function App() {
     removeQuickLink(link.id);
     setEditingShortcut(null);
     showToast(`${link.name} removed.`, 'Undo', () => {
+      const currentLinks = useNovaStore.getState().quickLinks;
+      if (currentLinks.length >= MAX_QUICK_LINKS && !currentLinks.some((item) => item.id === link.id)) {
+        showToast(`Remove another shortcut before restoring ${link.name}.`);
+        return;
+      }
       restoreQuickLink(link, index);
       setToast(null);
     }, 5000);

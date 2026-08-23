@@ -1,11 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import packageJson from '../package.json';
 
 const manifest = JSON.parse(
   readFileSync(resolve(process.cwd(), 'public/manifest.json'), 'utf8'),
 ) as {
   manifest_version: number;
+  version: string;
   name: string;
   description: string;
   default_locale: string;
@@ -26,6 +28,7 @@ const chineseMessages = JSON.parse(
 describe('Chrome extension manifest', () => {
   it('uses Manifest V3 and overrides the new tab page', () => {
     expect(manifest.manifest_version).toBe(3);
+    expect(manifest.version).toBe(packageJson.version);
     expect(manifest.chrome_url_overrides.newtab).toBe('index.html');
     expect(manifest.default_locale).toBe('en');
     expect(manifest.name).toBe('__MSG_extensionName__');

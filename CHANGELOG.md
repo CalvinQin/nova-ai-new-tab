@@ -2,6 +2,21 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.1.1] - 2026-08-24
+
+### Added
+
+- English and Simplified Chinese extension metadata for Chrome Web Store distribution.
+- Reproducible Chrome Web Store artwork generation and exact-dimension validation.
+- Store listing copy, privacy declarations, reviewer instructions, and real-browser promotional screenshots.
+
+### Fixed
+
+- Kept the 12-shortcut limit intact when an Undo action races with a newly added shortcut.
+- Restored focus to provider controls after keyboard dismissal and exposed Keyboard help in the command palette.
+- Made the About version derive from package metadata and verified package/manifest version parity.
+- Improved command-palette fit at 1280 × 800 and respected reduced-motion settings across Framer Motion.
+
 ## [0.1.0] - 2026-08-24
 
 ### Added

@@ -12,8 +12,6 @@ NOVA 是一款安静、键盘优先的 Chromium 新标签页，把 AI、搜索�
 - Command palette, Focus Mode, light/dark/system themes, five accents / 命令面板、专注模式、浅色/深色/跟随系统主题及 5 种强调色
 - Local-only preferences and destination metadata; prompts are never stored / 设置与访问目标仅保存在本机，不保存提示词
 - Manifest V3 with only the `storage` permission / Manifest V3，仅申请 `storage` 权限
-- Localized English and Simplified Chinese extension metadata / 英文与简体中文扩展元数据
-- Chrome Web Store listing copy and verified 1280×800 promotional screenshots / Chrome 应用商店双语文案与经过尺寸校验的 1280×800 宣传截图
 
 ## Install / 安装
 
@@ -22,6 +20,6 @@ NOVA 是一款安静、键盘优先的 Chromium 新标签页，把 AI、搜索�
 3. Open `chrome://extensions` and enable Developer mode / 打开扩展程序页面并开启开发者模式。
 4. Choose Load unpacked and select the unzipped folder / 点击“加载已解压的扩展程序”并选择解压目录。
 
-Verification: ESLint passed, 42 automated tests passed, production build succeeded, and `npm audit` reported 0 vulnerabilities.
+Verification: ESLint passed, 41 automated tests passed, production build succeeded, and `npm audit` reported 0 vulnerabilities.
 
-验证结果：ESLint 通过、42 项自动化测试通过、正式构建成功，`npm audit` 为 0 个漏洞。
+验证结果：ESLint 通过、41 项自动化测试通过、正式构建成功，`npm audit` 为 0 个漏洞。

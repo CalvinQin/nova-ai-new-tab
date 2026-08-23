@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import packageJson from '../../package.json';
 import {
   Bot,
   Eye,
@@ -311,7 +312,7 @@ export function SettingsDialog({
 
             {section === 'about' && (
               <SettingsPane title="NOVA" description="A lightweight browser OS launcher.">
-                <div className="about-mark"><span className="nova-symbol large" /><strong>Version 0.1.0</strong></div>
+                <div className="about-mark"><span className="nova-symbol large" /><strong>Version {packageJson.version}</strong></div>
                 <p className="about-copy">Built around one calm loop: input, Tab, Enter. NOVA sends you to the services you choose and stays out of the way.</p>
                 <div className="permission-row"><Eye aria-hidden="true" size={17} /><span><strong>One permission</strong><small>Local storage only</small></span></div>
               </SettingsPane>
