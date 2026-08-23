@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "NOVA — AI New Tab",
+  "name": "__MSG_extensionName__",
   "short_name": "NOVA",
   "version": "0.1.0",
-  "description": "A calm, keyboard-first launcher for AI, search, and the web.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "chrome_url_overrides": {
     "newtab": "index.html"
   },

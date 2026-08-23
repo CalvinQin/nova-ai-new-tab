@@ -83,6 +83,7 @@ NOVA stores settings, quick links, and recent **destination metadata** locally w
 npm run dev      # local Vite development
 npm run check    # ESLint + 42 tests + production build
 npm run icons    # regenerate extension icons
+npm run store:assets # regenerate and verify Chrome Web Store artwork
 ```
 
 Built with React, TypeScript, Vite, Zustand, Framer Motion, dnd-kit, Lucide, and Simple Icons. The production package targets Chrome Manifest V3.

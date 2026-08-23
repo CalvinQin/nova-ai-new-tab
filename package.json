@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "lint": "eslint . --max-warnings=0",
     "icons": "node scripts/generate-icons.mjs",
+    "store:assets": "node scripts/generate-store-assets.mjs",
     "check": "npm run lint && npm run test && npm run build"
   },
   "dependencies": {

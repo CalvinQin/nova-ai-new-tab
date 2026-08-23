@@ -17,6 +17,10 @@ NOVA is a local-first browser extension.
 
 Removing the extension removes its extension-local data according to the browser's normal extension lifecycle. You can clear recent destination metadata at any time from **Settings → Privacy**.
 
+### Chrome Web Store Limited Use
+
+NOVA's use of information received from Chrome APIs adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/user-data), including its Limited Use requirements. NOVA does not sell or transfer user data, use it for advertising or credit decisions, or allow humans to read it. Local data is used only to provide the extension's user-facing new-tab features.
+
 ## 简体中文
 
 NOVA 是一个本地优先的浏览器扩展。
@@ -31,3 +35,7 @@ NOVA 是一个本地优先的浏览器扩展。
 - 扩展只申请 Chrome 的 `storage` 权限，不申请任何主机权限。
 
 卸载扩展后，本地扩展数据会按照浏览器的正常扩展生命周期处理。用户也可以随时在 **设置 → 隐私** 中清除最近访问目标。
+
+### Chrome 应用商店有限使用声明
+
+NOVA 对 Chrome API 所提供信息的使用遵守 [Chrome 应用商店用户数据政策](https://developer.chrome.com/docs/webstore/program-policies/user-data)，包括其中的“有限使用”要求。NOVA 不销售或转移用户数据，不将数据用于广告或信用决策，也不允许人工读取。所有本地数据只用于提供扩展面向用户的新标签页功能。

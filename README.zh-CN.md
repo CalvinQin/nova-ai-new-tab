@@ -83,6 +83,7 @@ NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式和最近
 npm run dev      # 启动 Vite 本地开发
 npm run check    # ESLint + 42 项测试 + 正式构建
 npm run icons    # 重新生成扩展图标
+npm run store:assets # 重新生成并校验 Chrome 应用商店素材
 ```
 
 技术栈包括 React、TypeScript、Vite、Zustand、Framer Motion、dnd-kit、Lucide 与 Simple Icons，正式产物遵循 Chrome Manifest V3。

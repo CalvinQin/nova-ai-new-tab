@@ -12,6 +12,8 @@ NOVA 是一款安静、键盘优先的 Chromium 新标签页，把 AI、搜索�
 - Command palette, Focus Mode, light/dark/system themes, five accents / 命令面板、专注模式、浅色/深色/跟随系统主题及 5 种强调色
 - Local-only preferences and destination metadata; prompts are never stored / 设置与访问目标仅保存在本机，不保存提示词
 - Manifest V3 with only the `storage` permission / Manifest V3，仅申请 `storage` 权限
+- Localized English and Simplified Chinese extension metadata / 英文与简体中文扩展元数据
+- Chrome Web Store listing copy and verified 1280×800 promotional screenshots / Chrome 应用商店双语文案与经过尺寸校验的 1280×800 宣传截图
 
 ## Install / 安装
 

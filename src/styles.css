@@ -2047,7 +2047,7 @@ kbd {
 .palette-actions {
   display: grid;
   gap: 2px;
-  max-height: 360px;
+  max-height: min(410px, calc(100vh - 220px));
   padding: 7px;
   overflow: auto;
 }
