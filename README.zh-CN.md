@@ -1,0 +1,96 @@
+<div align="center">
+  <img src="docs/assets/nova-cover.png" alt="NOVA — Think. Search. Go." width="100%" />
+
+  <br />
+
+  **一个安静、键盘优先的 AI 原生浏览器新标签页。**
+
+  [English](README.md) · [简体中文](README.zh-CN.md) · [观看实机演示](docs/assets/nova-demo.mp4)
+
+  ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
+  ![测试](https://img.shields.io/badge/tests-41%20passed-4c8b61?style=flat-square)
+  ![权限](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
+  ![许可证](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
+</div>
+
+NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索网页、打开网址、即时计算，或跳转到常用网站，全程无需切换思路和界面。
+
+![NOVA 浅色主题](docs/assets/nova-light.png)
+
+## 为什么是 NOVA
+
+- **一个输入框完成所有动作：** AI、搜索、网址、计算器与斜杠命令使用同一套可预测交互。
+- **直达官方平台，不做中转代理：** 支持 ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek、Google、GitHub、YouTube 等服务。
+- **键盘优先：** `⌘/Ctrl K` 聚焦输入框，`Tab` 切换 AI/搜索，`⌘/Ctrl ⇧ P` 打开命令面板。
+- **属于你的快捷入口：** 最多添加 12 个网站，支持编辑、删除、撤销与拖拽排序。
+- **克制而精致：** 支持浅色、深色、跟随系统、五种强调色、专注模式与减少动态效果。
+- **从设计上保护隐私：** 无统计分析、无 API Key、无提示词历史，仅申请 `storage` 扩展权限。
+
+![NOVA 深色主题与智能建议](docs/assets/nova-command-dark.png)
+
+## 安装
+
+### 从 Release 安装
+
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.0.zip`。
+2. 解压文件。
+3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
+4. 开启右上角的 **开发者模式**。
+5. 点击 **加载已解压的扩展程序**，选择解压后的文件夹。
+6. 打开新标签页，完成三步初始化。
+
+### 从源码构建
+
+```bash
+git clone https://github.com/CalvinQin/nova-ai-new-tab.git
+cd nova-ai-new-tab
+npm ci
+npm run build
+```
+
+构建完成后，在 `chrome://extensions` 中加载生成的 `dist/` 文件夹。
+
+## 支持的平台
+
+| AI | 搜索 |
+| --- | --- |
+| ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek | Google、Bing、DuckDuckGo、Brave、YouTube、GitHub、Reddit、哔哩哔哩、知乎、小红书、淘宝 |
+
+有稳定查询链接的平台会直接接收内容；没有稳定链接的平台由 NOVA 复制提示词并打开官网，用户自行粘贴，整个过程不经过 NOVA 服务器。
+
+## 常用命令
+
+输入 `/` 即可发现 `/chatgpt`、`/google`、`/youtube`、`/github`、`/settings`、`/theme`、`/apps`、`/focus` 等命令。
+
+| 快捷键 | 功能 |
+| --- | --- |
+| `⌘/Ctrl K` | 聚焦通用命令栏 |
+| `Tab` | 切换 AI 与搜索模式 |
+| `↑` / `↓` | 浏览建议项 |
+| `Enter` | 执行当前动作 |
+| `⌘/Ctrl ⇧ P` | 打开命令面板 |
+| `Esc` | 关闭或清空当前界面 |
+
+![NOVA 设置中心](docs/assets/nova-settings.png)
+
+## 隐私
+
+NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式和最近访问的**目标元数据**，明确不保存提示词或搜索内容。项目没有主机权限、后台 Worker、统计分析、远程代码或 AI API 凭证。详见 [PRIVACY.md](PRIVACY.md)。
+
+## 开发与验证
+
+```bash
+npm run dev      # 启动 Vite 本地开发
+npm run check    # ESLint + 41 项测试 + 正式构建
+npm run icons    # 重新生成扩展图标
+```
+
+技术栈包括 React、TypeScript、Vite、Zustand、Framer Motion、dnd-kit、Lucide 与 Simple Icons，正式产物遵循 Chrome Manifest V3。
+
+## 参与贡献
+
+欢迎提交 Issue 和范围清晰的 Pull Request。参与前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 许可证
+
+[MIT](LICENSE) © 2026 Haoqi Qin。

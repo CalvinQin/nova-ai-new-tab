@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "NOVA — AI New Tab",
+  "short_name": "NOVA",
+  "version": "0.1.0",
+  "description": "A calm, keyboard-first launcher for AI, search, and the web.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": ["storage"],
+  "icons": {
+    "16": "icons/nova-16.png",
+    "32": "icons/nova-32.png",
+    "48": "icons/nova-48.png",
+    "128": "icons/nova-128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: https:;"
+  }
+}
