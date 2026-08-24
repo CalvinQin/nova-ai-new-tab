@@ -1,8 +1,8 @@
 # NOVA Chrome Web Store upload checklist / 上架操作清单
 
-Chrome Web Store protects its developer dashboard from browser-extension automation. The first item must therefore be created in the dashboard. Every file and text field below is already prepared.
+Chrome Web Store protects its developer dashboard from browser-extension automation. Its current v2 API only uploads packages to an existing item; this account has no preconfigured Chrome Web Store OAuth client or item ID. The first draft therefore needs to be created in the dashboard. Every file and text field below is already prepared.
 
-Chrome 应用商店会阻止浏览器扩展脚本控制开发者后台，因此首个条目必须在后台手工创建。以下文件与文字均已准备完成。
+Chrome 应用商店会阻止浏览器扩展脚本控制开发者后台；当前 v2 API 也只能向既有条目上传包，而该账号尚未配置 Chrome Web Store OAuth 客户端或条目 ID。因此首个草稿需要在后台手工创建。以下文件与文字均已准备完成。
 
 ## 1. Create the item / 创建条目
 
