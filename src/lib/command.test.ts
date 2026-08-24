@@ -50,6 +50,15 @@ describe('resolveInput', () => {
     });
   });
 
+  it('builds a 百度 search URL', () => {
+    expect(resolveInput('/baidu 浏览器插件', 'ai', 'chatgpt', 'google')).toMatchObject({
+      type: 'navigate',
+      kind: 'search',
+      targetId: 'baidu',
+      url: 'https://www.baidu.com/s?wd=%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6',
+    });
+  });
+
   it('uses an AI deep link when the provider supports one', () => {
     expect(resolveInput('解释 React', 'ai', 'chatgpt', 'google')).toMatchObject({
       type: 'navigate',
@@ -75,6 +84,16 @@ describe('resolveInput', () => {
       kind: 'search',
       targetId: 'youtube',
       url: 'https://www.youtube.com/results?search_query=iPhone%2018',
+    });
+  });
+
+  it('routes China AI slash commands with clipboard handoff', () => {
+    expect(resolveInput('/qwen 解释 TypeScript', 'search', 'claude', 'google')).toMatchObject({
+      type: 'navigate',
+      kind: 'ai',
+      targetId: 'qwen',
+      url: 'https://chat.qwen.ai/',
+      copyText: '解释 TypeScript',
     });
   });
 

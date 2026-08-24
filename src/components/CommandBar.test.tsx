@@ -63,6 +63,13 @@ describe('CommandBar keyboard flow', () => {
     expect(document.activeElement).not.toBe(input);
   });
 
+  it('uses the saved provider order in the picker', () => {
+    const props = renderCommandBar({ aiProviderOrder: ['qwen', 'chatgpt', 'claude', 'gemini', 'perplexity', 'grok', 'deepseek', 'doubao', 'kimi', 'yuanbao'] });
+    fireEvent.click(screen.getByRole('button', { name: 'Ask ChatGPT' }));
+    expect(screen.getAllByRole('option')[0].textContent).toContain('通义千问');
+    expect(props.onAiProviderChange).not.toHaveBeenCalled();
+  });
+
   it('shows a calculator result without turning it into another suggestion', async () => {
     renderCommandBar({ mode: 'search' });
     const input = screen.getByRole('textbox', { name: 'Search with Google' }) as HTMLInputElement;

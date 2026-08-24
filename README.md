@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [Watch the real-browser demo](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![Tests](https://img.shields.io/badge/tests-43%20passed-4c8b61?style=flat-square)
+  ![Tests](https://img.shields.io/badge/tests-46%20passed-4c8b61?style=flat-square)
   ![Permission](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
   ![License](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -32,7 +32,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 
 ### From a release
 
-1. Download `nova-ai-new-tab-v0.1.1.zip` from [Releases](../../releases).
+1. Download `nova-ai-new-tab-v0.1.2.zip` from [Releases](../../releases).
 2. Unzip it.
 3. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 4. Enable **Developer mode**.
@@ -54,7 +54,7 @@ Then load the generated `dist/` folder from `chrome://extensions`.
 
 | AI | Search |
 | --- | --- |
-| ChatGPT, Claude, Gemini, Perplexity, Grok, DeepSeek | Google, Bing, DuckDuckGo, Brave, YouTube, GitHub, Reddit, Bilibili, Zhihu, Xiaohongshu, Taobao |
+| ChatGPT, Claude, Gemini, Perplexity, Grok, DeepSeek, 豆包, Kimi, 通义千问, 腾讯元宝 | Google, 百度, Bing, DuckDuckGo, Brave, YouTube, GitHub, Reddit, Bilibili, Zhihu, Xiaohongshu, Taobao |
 
 Providers with a stable query URL receive the prompt directly. For providers without one, NOVA copies the prompt and opens the official site so you can paste it yourself.
 

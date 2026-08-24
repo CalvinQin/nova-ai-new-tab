@@ -10,20 +10,21 @@ import { SettingsDialog, type SettingsSection } from './components/SettingsDialo
 import { ShortcutDialog } from './components/ShortcutDialog';
 import { Toast, type ToastState } from './components/Toast';
 import { TopBar } from './components/TopBar';
+import { I18nProvider } from './i18n';
 import { MAX_QUICK_LINKS } from './data/catalog';
 import { useTheme } from './hooks/useTheme';
 import type { LocalCommand, ResolvedAction } from './lib/command';
 import { useNovaStore } from './store/useNovaStore';
-import type { AiProviderId, Mode, QuickLink, RecentItem, SearchEngineId, Theme } from './types';
+import type { AiProviderId, Language, Mode, QuickLink, RecentItem, SearchEngineId, Theme } from './types';
 
 const themeOrder: Theme[] = ['system', 'light', 'dark'];
 
-function greetingFor(date: Date) {
+function greetingFor(date: Date, language: Language) {
   const hour = date.getHours();
-  if (hour < 5) return 'Still awake?';
-  if (hour < 12) return 'Good morning.';
-  if (hour < 18) return 'Good afternoon.';
-  return 'Good evening.';
+  const suffix = hour < 5 ? 'night' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+  return language === 'zh-CN'
+    ? ({ night: '还没休息？', morning: '早上好。', afternoon: '下午好。', evening: '晚上好。' }[suffix])
+    : ({ night: 'Still awake?', morning: 'Good morning.', afternoon: 'Good afternoon.', evening: 'Good evening.' }[suffix]);
 }
 
 async function copyToClipboard(value: string): Promise<boolean> {
@@ -75,6 +76,7 @@ export default function App() {
   const pointerFrame = useRef<number | undefined>(undefined);
 
   useTheme(settings.theme, settings.accent, settings.animations);
+  useEffect(() => { document.documentElement.lang = settings.language === 'zh-CN' ? 'zh-CN' : 'en'; }, [settings.language]);
   const mode = modeOverride ?? settings.defaultMode;
   const setMode = useCallback((nextMode: Mode) => setModeOverride(nextMode), []);
 
@@ -250,17 +252,20 @@ export default function App() {
   const focusMode = settings.focusMode;
 
   return (
+    <I18nProvider language={settings.language}>
     <MotionConfig reducedMotion={settings.animations ? 'user' : 'always'}>
     <div className={focusMode ? 'app is-focus-mode' : 'app'}>
       <div className="ambient" aria-hidden="true"><span className="orbital-line" /></div>
 
       <div className="page-frame" inert={overlayOpen ? true : undefined}>
         <a className="skip-link" href="#main-content">Skip to command bar</a>
-        <TopBar
+          <TopBar
           showClock={settings.showClock}
           focusMode={focusMode}
           onToggleFocus={toggleFocus}
-          onOpenSettings={() => setSettingsSection('general')}
+            onOpenSettings={() => setSettingsSection('general')}
+            language={settings.language}
+            onLanguageChange={(language) => updateSettings({ language })}
         />
 
         <main id="main-content" className="main-content">
@@ -274,8 +279,8 @@ export default function App() {
                 transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
               >
                 <span className="greeting-index">{String(new Date().getDate()).padStart(2, '0')}</span>
-                <h1>{greetingFor(new Date())}</h1>
-                <p>Where to?</p>
+                <h1>{greetingFor(new Date(), settings.language)}</h1>
+                <p>{settings.language === 'zh-CN' ? '下一步去哪里？' : 'Where to?'}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -291,6 +296,8 @@ export default function App() {
               mode={mode}
               aiProvider={settings.aiProvider}
               searchEngine={settings.searchEngine}
+              aiProviderOrder={settings.aiProviderOrder}
+              searchEngineOrder={settings.searchEngineOrder}
               onModeChange={setMode}
               onAiProviderChange={(aiProvider) => updateSettings({ aiProvider })}
               onSearchEngineChange={(searchEngine) => updateSettings({ searchEngine })}
@@ -346,13 +353,13 @@ export default function App() {
       )}
 
       {settingsSection && (
-        <SettingsDialog
+            <SettingsDialog
           settings={settings}
           quickLinks={quickLinks}
           recentCount={recents.length}
           initialSection={settingsSection}
           onClose={() => setSettingsSection(null)}
-          onUpdate={updateSettings}
+              onUpdate={updateSettings}
           onAddShortcut={() => { setSettingsSection(null); openNewShortcut(); }}
           onEditShortcut={(link) => { setSettingsSection(null); setEditingShortcut(link); }}
           onClearRecents={() => { clearRecents(); showToast('Recent destinations cleared.'); }}
@@ -386,5 +393,6 @@ export default function App() {
       <Toast toast={toast} />
     </div>
     </MotionConfig>
+    </I18nProvider>
   );
 }

@@ -4,6 +4,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { aiProviders, searchEngines } from '../data/catalog';
 import type { AiProviderId, Mode, NovaSettings, SearchEngineId } from '../types';
 import { BrandIcon } from './BrandIcon';
+import { useI18n } from '../i18n';
 
 interface OnboardingDialogProps {
   settings: NovaSettings;
@@ -12,6 +13,7 @@ interface OnboardingDialogProps {
 }
 
 export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingDialogProps) {
+  const { language, t } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [step, setStep] = useState(0);
 
@@ -40,8 +42,12 @@ export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingD
       >
         <header className="onboarding-header">
           <span className="nova-symbol onboarding-symbol" />
-          <div className="onboarding-progress" aria-label={`Step ${step + 1} of 3`}>
+          <div className="onboarding-progress" aria-label={t('onboard.step', { step: step + 1 })}>
             {[0, 1, 2].map((item) => <span key={item} className={step === item ? 'is-active' : step > item ? 'is-done' : ''} />)}
+          </div>
+          <div className="onboarding-language-switch" role="group" aria-label={t('language.name')}>
+            <button type="button" className={language === 'en' ? 'is-active' : ''} aria-pressed={language === 'en'} onClick={() => onUpdate({ language: 'en' })}>EN</button>
+            <button type="button" className={language === 'zh-CN' ? 'is-active' : ''} aria-pressed={language === 'zh-CN'} onClick={() => onUpdate({ language: 'zh-CN' })}>中</button>
           </div>
         </header>
 
@@ -56,13 +62,13 @@ export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingD
           >
             {step === 0 && (
               <>
-                <span className="dialog-eyebrow">Welcome to NOVA</span>
-                <h2 id="onboarding-title">Where do you begin?</h2>
-                <p>Choose the mode waiting for you on a fresh tab. Tab switches it instantly.</p>
-                <div className="onboarding-choice two-up" role="radiogroup" aria-label="Default mode">
+                <span className="dialog-eyebrow">{t('onboard.welcome')}</span>
+                <h2 id="onboarding-title">{t('onboard.begin.title')}</h2>
+                <p>{t('onboard.begin.desc')}</p>
+                <div className="onboarding-choice two-up" role="radiogroup" aria-label={t('settings.defaultMode')}>
                   {([
-                    { id: 'ai' as Mode, title: 'Ask AI', description: 'Start with your AI provider' },
-                    { id: 'search' as Mode, title: 'Search', description: 'Start with the open web' },
+                    { id: 'ai' as Mode, title: t('onboard.ask.title'), description: t('onboard.ask.desc') },
+                    { id: 'search' as Mode, title: t('onboard.search.title'), description: t('onboard.search.desc') },
                   ]).map((option) => (
                     <button
                       type="button"
@@ -84,10 +90,10 @@ export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingD
 
             {step === 1 && (
               <>
-                <span className="dialog-eyebrow">Default AI</span>
-                <h2 id="onboarding-title">Choose your thinking space.</h2>
-                <p>NOVA hands off your prompt without calling an AI API itself.</p>
-                <div className="onboarding-choice provider-choice" role="radiogroup" aria-label="Default AI provider">
+                <span className="dialog-eyebrow">{t('onboard.ai.eyebrow')}</span>
+                <h2 id="onboarding-title">{t('onboard.ai.title')}</h2>
+                <p>{t('onboard.ai.desc')}</p>
+                <div className="onboarding-choice provider-choice" role="radiogroup" aria-label={t('settings.ai.title')}>
                   {Object.values(aiProviders).map((provider) => (
                     <button
                       type="button"
@@ -108,10 +114,10 @@ export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingD
 
             {step === 2 && (
               <>
-                <span className="dialog-eyebrow">Default search</span>
-                <h2 id="onboarding-title">Choose your way into the web.</h2>
-                <p>You can switch destinations from the command bar at any time.</p>
-                <div className="onboarding-choice provider-choice" role="radiogroup" aria-label="Default search engine">
+                <span className="dialog-eyebrow">{t('onboard.web.eyebrow')}</span>
+                <h2 id="onboarding-title">{t('onboard.web.title')}</h2>
+                <p>{t('onboard.web.desc')}</p>
+                <div className="onboarding-choice provider-choice" role="radiogroup" aria-label={t('settings.search.title')}>
                   {Object.values(searchEngines).slice(0, 6).map((engine) => (
                     <button
                       type="button"
@@ -134,13 +140,13 @@ export function OnboardingDialog({ settings, onUpdate, onComplete }: OnboardingD
 
         <footer className="onboarding-actions">
           <span>{step + 1} / 3</span>
-          {step > 0 && <button type="button" className="quiet-button" onClick={() => setStep((current) => current - 1)}>Back</button>}
+          {step > 0 && <button type="button" className="quiet-button" onClick={() => setStep((current) => current - 1)}>{t('onboard.back')}</button>}
           <button
             type="button"
             className="primary-button"
             onClick={() => (step < 2 ? setStep((current) => current + 1) : finish())}
           >
-            {step < 2 ? <>Continue <ArrowRight aria-hidden="true" size={15} /></> : <>You're ready <Check aria-hidden="true" size={15} /></>}
+            {step < 2 ? <>{t('onboard.continue')} <ArrowRight aria-hidden="true" size={15} /></> : <>{t('onboard.ready')} <Check aria-hidden="true" size={15} /></>}
           </button>
         </footer>
       </motion.div>

@@ -28,6 +28,7 @@ export interface CommandDefinition {
 
 export const commandDefinitions: CommandDefinition[] = [
   { id: 'google', label: '/google', description: 'Search with Google', mode: 'search', targetId: 'google' },
+  { id: 'baidu', label: '/baidu', description: 'Search with 百度', mode: 'search', targetId: 'baidu' },
   { id: 'bing', label: '/bing', description: 'Search with Bing', mode: 'search', targetId: 'bing' },
   { id: 'duckduckgo', label: '/duckduckgo', description: 'Search privately', mode: 'search', targetId: 'duckduckgo' },
   { id: 'brave', label: '/brave', description: 'Search with Brave', mode: 'search', targetId: 'brave' },
@@ -44,6 +45,10 @@ export const commandDefinitions: CommandDefinition[] = [
   { id: 'perplexity', label: '/perplexity', description: 'Ask Perplexity', mode: 'ai', targetId: 'perplexity' },
   { id: 'deepseek', label: '/deepseek', description: 'Ask DeepSeek', mode: 'ai', targetId: 'deepseek' },
   { id: 'grok', label: '/grok', description: 'Ask Grok', mode: 'ai', targetId: 'grok' },
+  { id: 'doubao', label: '/doubao', description: 'Ask 豆包', mode: 'ai', targetId: 'doubao' },
+  { id: 'kimi', label: '/kimi', description: 'Ask Kimi', mode: 'ai', targetId: 'kimi' },
+  { id: 'qwen', label: '/qwen', description: 'Ask 通义千问', mode: 'ai', targetId: 'qwen' },
+  { id: 'yuanbao', label: '/yuanbao', description: 'Ask 腾讯元宝', mode: 'ai', targetId: 'yuanbao' },
   { id: 'settings', label: '/settings', description: 'Open settings', local: 'settings' },
   { id: 'theme', label: '/theme', description: 'Cycle appearance', local: 'theme' },
   { id: 'apps', label: '/apps', description: 'Manage quick links', local: 'apps' },

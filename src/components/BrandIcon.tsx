@@ -3,6 +3,7 @@ import { Globe2 } from 'lucide-react';
 import type { SimpleIcon } from 'simple-icons';
 import {
   siAlibabadotcom,
+  siBaidu,
   siBilibili,
   siBrave,
   siClaude,
@@ -14,10 +15,12 @@ import {
   siGoogle,
   siGoogledrive,
   siGooglegemini,
+  siKimi,
   siNotion,
   siPerplexity,
   siReddit,
   siTaobao,
+  siQwen,
   siX,
   siXiaohongshu,
   siYoutube,
@@ -31,7 +34,10 @@ const icons: Partial<Record<BrandIconKey, SimpleIcon>> = {
   perplexity: siPerplexity,
   grok: siX,
   deepseek: siDeepseek,
+  kimi: siKimi,
+  qwen: siQwen,
   google: siGoogle,
+  baidu: siBaidu,
   duckduckgo: siDuckduckgo,
   brave: siBrave,
   youtube: siYoutube,
@@ -110,6 +116,24 @@ export function BrandIcon({ icon, iconUrl, size = 20, className, label }: BrandI
         strokeLinejoin="round"
       >
         <path d="M4.5 7.2h11.7M9.2 3.5 4.5 7.2l4.7 3.7M19.5 16.8H7.8m7 3.7 4.7-3.7-4.7-3.7" />
+      </svg>
+    );
+  }
+
+  if (icon === 'doubao') {
+    return (
+      <svg className={className} aria-hidden="true" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7.2 6.1c1.7-2.2 5.8-2.2 7.4 0 2.2-.6 4.3 1.1 4 3.5 1.7 1.6 1.2 4.5-.9 5.4-.4 2.5-3.2 3.7-5.2 2.4-2 1.3-4.8.1-5.2-2.4-2.1-.9-2.6-3.8-.9-5.4-.3-2.4 1.8-4.1 4-3.5Z" />
+        <path d="M9.2 11.2h.01M14.8 11.2h.01M9.3 14.1c1.7 1.1 3.7 1.1 5.4 0" />
+      </svg>
+    );
+  }
+
+  if (icon === 'yuanbao') {
+    return (
+      <svg className={className} aria-hidden="true" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3.5 19 7.4v9.2L12 20.5 5 16.6V7.4L12 3.5Z" />
+        <path d="m8.5 10.2 3.5-2 3.5 2v4l-3.5 2-3.5-2v-4Z" />
       </svg>
     );
   }

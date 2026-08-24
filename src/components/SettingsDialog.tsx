@@ -1,9 +1,23 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import {
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragStartEvent,
+} from '@dnd-kit/core';
+import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import packageJson from '../../package.json';
 import {
   Bot,
   Eye,
+  GripVertical,
   Info,
   Keyboard,
   LayoutGrid,
@@ -19,6 +33,8 @@ import { aiProviders, MAX_QUICK_LINKS, searchEngines } from '../data/catalog';
 import type {
   Accent,
   AiProviderId,
+  Destination,
+  Language,
   Mode,
   NovaSettings,
   QuickLink,
@@ -26,6 +42,7 @@ import type {
   Theme,
 } from '../types';
 import { BrandIcon } from './BrandIcon';
+import { useI18n } from '../i18n';
 
 export type SettingsSection =
   | 'general'
@@ -105,6 +122,62 @@ function Segmented<T extends string>({ value, options, onChange, label }: {
   );
 }
 
+interface DestinationRankerProps<T extends AiProviderId | SearchEngineId> {
+  ids: T[];
+  destinations: Record<T, Destination>;
+  selectedId: T;
+  onSelect: (id: T) => void;
+  onReorder: (ids: T[]) => void;
+}
+
+function SortableDestination({ destination, selected, onSelect }: {
+  destination: Destination;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  const { t } = useI18n();
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: destination.id });
+  return (
+    <div ref={setNodeRef} className={selected ? 'destination-card is-selected' : 'destination-card'} style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.28 : 1 }}>
+      <button type="button" className="destination-card-main" role="radio" aria-checked={selected} onClick={onSelect}>
+        <BrandIcon icon={destination.icon} size={20} />
+        <span><strong>{destination.name}</strong>{destination.region === 'china' && <small>{t('settings.china')}</small>}{destination.note && <small>{t('picker.copies')}</small>}</span>
+      </button>
+      <button type="button" className="destination-card-drag" aria-label={t('settings.drag', { name: destination.name })} {...attributes} {...listeners}>
+        <GripVertical aria-hidden="true" size={15} />
+      </button>
+    </div>
+  );
+}
+
+function DestinationRanker<T extends AiProviderId | SearchEngineId>({ ids, destinations, selectedId, onSelect, onReorder }: DestinationRankerProps<T>) {
+  const [activeId, setActiveId] = useState<T | null>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 7 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+  const active = activeId ? destinations[activeId] : null;
+  const handleDragEnd = ({ active: dragged, over }: DragEndEvent) => {
+    setActiveId(null);
+    if (!over || dragged.id === over.id) return;
+    const oldIndex = ids.indexOf(dragged.id as T);
+    const newIndex = ids.indexOf(over.id as T);
+    if (oldIndex >= 0 && newIndex >= 0) onReorder(arrayMove(ids, oldIndex, newIndex));
+  };
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active: dragged }: DragStartEvent) => setActiveId(dragged.id as T)} onDragCancel={() => setActiveId(null)} onDragEnd={handleDragEnd}>
+      <div className="destination-grid destination-ranker" role="radiogroup">
+        <SortableContext items={ids} strategy={rectSortingStrategy}>
+          {ids.map((id) => <SortableDestination key={id} destination={destinations[id]} selected={selectedId === id} onSelect={() => onSelect(id)} />)}
+        </SortableContext>
+      </div>
+      <DragOverlay dropAnimation={{ duration: 160, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }}>
+        {active && <div className="destination-card is-lifted"><BrandIcon icon={active.icon} size={20} /><span><strong>{active.name}</strong></span></div>}
+      </DragOverlay>
+    </DndContext>
+  );
+}
+
 export function SettingsDialog({
   settings,
   quickLinks,
@@ -116,6 +189,7 @@ export function SettingsDialog({
   onEditShortcut,
   onClearRecents,
 }: SettingsDialogProps) {
+  const { t } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [section, setSection] = useState<SettingsSection>(initialSection);
 
@@ -146,16 +220,16 @@ export function SettingsDialog({
         <header className="settings-header">
           <div>
             <span className="dialog-eyebrow">NOVA</span>
-            <h2 id="settings-dialog-title">Settings</h2>
+            <h2 id="settings-dialog-title">{t('settings.title')}</h2>
           </div>
-          <button type="button" className="icon-button" onClick={onClose} aria-label="Close settings">
+          <button type="button" className="icon-button" onClick={onClose} aria-label={t('settings.close')}>
             <X aria-hidden="true" size={18} />
           </button>
         </header>
 
         <div className="settings-layout">
           <nav className="settings-nav" aria-label="Settings sections">
-            {sections.map(({ id, label, icon: Icon }) => (
+            {sections.map(({ id, icon: Icon }) => (
               <button
                 type="button"
                 className={section === id ? 'is-active' : ''}
@@ -164,68 +238,46 @@ export function SettingsDialog({
                 onClick={() => setSection(id)}
               >
                 <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
-                <span>{label}</span>
+                <span>{({ general: t('settings.general'), ai: t('settings.ai'), search: t('settings.search'), shortcuts: t('settings.shortcuts'), appearance: t('settings.appearance'), privacy: t('settings.privacy'), keyboard: t('settings.keyboard'), about: t('settings.about') } as Record<SettingsSection, string>)[id]}</span>
               </button>
             ))}
           </nav>
 
           <div className="settings-content" key={section}>
             {section === 'general' && (
-              <SettingsPane title="General" description="Choose what a fresh tab feels like.">
+              <SettingsPane title={t('settings.general')} description={t('settings.general.desc')}>
                 <Segmented<Mode>
-                  label="Default mode"
+                  label={t('settings.defaultMode')}
                   value={settings.defaultMode}
-                  options={[{ value: 'ai', label: 'AI' }, { value: 'search', label: 'Search' }]}
+                  options={[{ value: 'ai', label: t('mode.ai') }, { value: 'search', label: t('mode.search') }]}
                   onChange={(defaultMode) => onUpdate({ defaultMode })}
                 />
+                <Segmented<Language>
+                  label={t('language.name')}
+                  value={settings.language}
+                  options={[{ value: 'en', label: '🇺🇸 English' }, { value: 'zh-CN', label: '🇨🇳 简体中文' }]}
+                  onChange={(language) => onUpdate({ language })}
+                />
                 <div className="settings-group">
-                  <Toggle checked={settings.showGreeting} onChange={(showGreeting) => onUpdate({ showGreeting })} label="Greeting" />
-                  <Toggle checked={settings.showClock} onChange={(showClock) => onUpdate({ showClock })} label="Clock" />
-                  <Toggle checked={settings.showShortcuts} onChange={(showShortcuts) => onUpdate({ showShortcuts })} label="Quick links" />
-                  <Toggle checked={settings.showRecent} onChange={(showRecent) => onUpdate({ showRecent })} label="Recent destinations" />
-                  <Toggle checked={settings.focusMode} onChange={(focusMode) => onUpdate({ focusMode })} label="Focus Mode" description="Keep only the command bar visible." />
-                  <Toggle checked={settings.animations} onChange={(animations) => onUpdate({ animations })} label="Motion" description="Respects the system reduced-motion preference." />
+                  <Toggle checked={settings.showGreeting} onChange={(showGreeting) => onUpdate({ showGreeting })} label={t('settings.greeting')} />
+                  <Toggle checked={settings.showClock} onChange={(showClock) => onUpdate({ showClock })} label={t('settings.clock')} />
+                  <Toggle checked={settings.showShortcuts} onChange={(showShortcuts) => onUpdate({ showShortcuts })} label={t('settings.quickLinks')} />
+                  <Toggle checked={settings.showRecent} onChange={(showRecent) => onUpdate({ showRecent })} label={t('settings.recents')} />
+                  <Toggle checked={settings.focusMode} onChange={(focusMode) => onUpdate({ focusMode })} label={t('settings.focus')} description={t('settings.focus.desc')} />
+                  <Toggle checked={settings.animations} onChange={(animations) => onUpdate({ animations })} label={t('settings.motion')} description={t('settings.motion.desc')} />
                 </div>
               </SettingsPane>
             )}
 
             {section === 'ai' && (
-              <SettingsPane title="AI provider" description="NOVA opens the provider you choose. No AI API is called.">
-                <div className="destination-grid" role="radiogroup" aria-label="Default AI provider">
-                  {Object.values(aiProviders).map((provider) => (
-                    <button
-                      type="button"
-                      role="radio"
-                      aria-checked={settings.aiProvider === provider.id}
-                      className={settings.aiProvider === provider.id ? 'destination-card is-selected' : 'destination-card'}
-                      key={provider.id}
-                      onClick={() => onUpdate({ aiProvider: provider.id as AiProviderId })}
-                    >
-                      <BrandIcon icon={provider.icon} size={20} />
-                      <span><strong>{provider.name}</strong>{provider.note && <small>Clipboard handoff</small>}</span>
-                    </button>
-                  ))}
-                </div>
+              <SettingsPane title={t('settings.ai.title')} description={t('settings.ai.desc')}>
+                <DestinationRanker<AiProviderId> ids={settings.aiProviderOrder} destinations={aiProviders} selectedId={settings.aiProvider} onSelect={(aiProvider) => onUpdate({ aiProvider })} onReorder={(aiProviderOrder) => onUpdate({ aiProviderOrder })} />
               </SettingsPane>
             )}
 
             {section === 'search' && (
-              <SettingsPane title="Search engine" description="Pick the destination used in Search mode.">
-                <div className="destination-grid" role="radiogroup" aria-label="Default search engine">
-                  {Object.values(searchEngines).map((engine) => (
-                    <button
-                      type="button"
-                      role="radio"
-                      aria-checked={settings.searchEngine === engine.id}
-                      className={settings.searchEngine === engine.id ? 'destination-card is-selected' : 'destination-card'}
-                      key={engine.id}
-                      onClick={() => onUpdate({ searchEngine: engine.id as SearchEngineId })}
-                    >
-                      <BrandIcon icon={engine.icon} size={19} />
-                      <strong>{engine.name}</strong>
-                    </button>
-                  ))}
-                </div>
+              <SettingsPane title={t('settings.search.title')} description={t('settings.search.desc')}>
+                <DestinationRanker<SearchEngineId> ids={settings.searchEngineOrder} destinations={searchEngines} selectedId={settings.searchEngine} onSelect={(searchEngine) => onUpdate({ searchEngine })} onReorder={(searchEngineOrder) => onUpdate({ searchEngineOrder })} />
               </SettingsPane>
             )}
 

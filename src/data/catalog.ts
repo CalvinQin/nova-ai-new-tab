@@ -7,6 +7,16 @@ import type {
 
 export const MAX_QUICK_LINKS = 12;
 
+export const aiProviderIds: AiProviderId[] = [
+  'chatgpt', 'claude', 'gemini', 'perplexity', 'grok', 'deepseek',
+  'doubao', 'kimi', 'qwen', 'yuanbao',
+];
+
+export const searchEngineIds: SearchEngineId[] = [
+  'google', 'baidu', 'bing', 'duckduckgo', 'brave', 'youtube', 'github', 'reddit',
+  'bilibili', 'zhihu', 'xiaohongshu', 'taobao',
+];
+
 export const aiProviders: Record<AiProviderId, Destination> = {
   chatgpt: {
     id: 'chatgpt',
@@ -56,6 +66,44 @@ export const aiProviders: Record<AiProviderId, Destination> = {
     brandColor: '#4d6bfe',
     note: 'Prompt is copied before opening DeepSeek.',
   },
+  doubao: {
+    id: 'doubao',
+    name: '豆包',
+    homeUrl: 'https://www.doubao.com/chat/',
+    icon: 'doubao',
+    brandColor: '#4d71ff',
+    note: 'Prompt is copied before opening 豆包.',
+    region: 'china',
+  },
+  kimi: {
+    id: 'kimi',
+    name: 'Kimi',
+    homeUrl: 'https://www.kimi.com/',
+    icon: 'kimi',
+    brandColor: '#2265de',
+    note: 'Prompt is copied before opening Kimi.',
+    region: 'china',
+  },
+  qwen: {
+    id: 'qwen',
+    name: '通义千问',
+    shortName: '千问',
+    homeUrl: 'https://chat.qwen.ai/',
+    icon: 'qwen',
+    brandColor: '#5d66f6',
+    note: 'Prompt is copied before opening 通义千问.',
+    region: 'china',
+  },
+  yuanbao: {
+    id: 'yuanbao',
+    name: '腾讯元宝',
+    shortName: '元宝',
+    homeUrl: 'https://yuanbao.tencent.com/',
+    icon: 'yuanbao',
+    brandColor: '#2f91f8',
+    note: 'Prompt is copied before opening 腾讯元宝.',
+    region: 'china',
+  },
 };
 
 export const searchEngines: Record<SearchEngineId, Destination> = {
@@ -66,6 +114,14 @@ export const searchEngines: Record<SearchEngineId, Destination> = {
     queryTemplate: 'https://www.google.com/search?q={query}',
     icon: 'google',
     brandColor: '#4285f4',
+  },
+  baidu: {
+    id: 'baidu',
+    name: '百度',
+    homeUrl: 'https://www.baidu.com/',
+    queryTemplate: 'https://www.baidu.com/s?wd={query}',
+    icon: 'baidu',
+    brandColor: '#2932e1',
   },
   bing: {
     id: 'bing',

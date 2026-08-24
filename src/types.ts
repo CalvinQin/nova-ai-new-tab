@@ -1,9 +1,21 @@
 export type Mode = 'ai' | 'search';
 export type Theme = 'light' | 'dark' | 'system';
 export type Accent = 'neutral' | 'blue' | 'purple' | 'green' | 'orange';
-export type AiProviderId = 'chatgpt' | 'claude' | 'gemini' | 'perplexity' | 'grok' | 'deepseek';
+export type Language = 'en' | 'zh-CN';
+export type AiProviderId =
+  | 'chatgpt'
+  | 'claude'
+  | 'gemini'
+  | 'perplexity'
+  | 'grok'
+  | 'deepseek'
+  | 'doubao'
+  | 'kimi'
+  | 'qwen'
+  | 'yuanbao';
 export type SearchEngineId =
   | 'google'
+  | 'baidu'
   | 'bing'
   | 'duckduckgo'
   | 'brave'
@@ -24,12 +36,17 @@ export type BrandIconKey =
   | 'drive'
   | 'alibaba'
   | 'tradeflow'
+  | 'doubao'
+  | 'kimi'
+  | 'qwen'
+  | 'yuanbao'
   | 'website';
 
 export interface Destination {
   id: AiProviderId | SearchEngineId;
   name: string;
   shortName?: string;
+  region?: 'global' | 'china';
   homeUrl: string;
   queryTemplate?: string;
   icon: BrandIconKey;
@@ -67,4 +84,7 @@ export interface NovaSettings {
   showShortcuts: boolean;
   focusMode: boolean;
   animations: boolean;
+  language: Language;
+  aiProviderOrder: AiProviderId[];
+  searchEngineOrder: SearchEngineId[];
 }

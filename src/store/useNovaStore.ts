@@ -1,8 +1,13 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
-import { defaultQuickLinks, MAX_QUICK_LINKS } from '../data/catalog';
+import {
+  aiProviderIds,
+  defaultQuickLinks,
+  MAX_QUICK_LINKS,
+  searchEngineIds,
+} from '../data/catalog';
 import { restoreShortcutAt } from '../lib/shortcut';
-import type { NovaSettings, QuickLink, RecentItem } from '../types';
+import type { NovaSettings, QuickLink, RecentItem, SearchEngineId } from '../types';
 
 const defaultSettings: NovaSettings = {
   defaultMode: 'ai',
@@ -16,7 +21,25 @@ const defaultSettings: NovaSettings = {
   showShortcuts: true,
   focusMode: false,
   animations: true,
+  language: 'en',
+  aiProviderOrder: aiProviderIds,
+  searchEngineOrder: searchEngineIds,
 };
+
+function normalizeOrder<T extends string>(saved: T[] | undefined, available: T[]): T[] {
+  const known = new Set(available);
+  const uniqueSaved = (saved ?? []).filter((id, index, ids) => known.has(id) && ids.indexOf(id) === index);
+  return [...uniqueSaved, ...available.filter((id) => !uniqueSaved.includes(id))];
+}
+
+function normalizeSearchOrder(saved: SearchEngineId[] | undefined): SearchEngineId[] {
+  const normalized = normalizeOrder(saved, searchEngineIds);
+  if (saved?.includes('baidu')) return normalized;
+  const withoutBaidu = normalized.filter((id) => id !== 'baidu') as SearchEngineId[];
+  const googleIndex = withoutBaidu.indexOf('google');
+  withoutBaidu.splice(Math.max(0, googleIndex + 1), 0, 'baidu');
+  return withoutBaidu;
+}
 
 const chromeStorage: StateStorage = {
   async getItem(name) {
@@ -112,7 +135,12 @@ export const useNovaStore = create<NovaState>()(
         return {
           ...current,
           ...saved,
-          settings: { ...defaultSettings, ...saved?.settings },
+          settings: {
+            ...defaultSettings,
+            ...saved?.settings,
+            aiProviderOrder: normalizeOrder(saved?.settings?.aiProviderOrder, aiProviderIds),
+            searchEngineOrder: normalizeSearchOrder(saved?.settings?.searchEngineOrder),
+          },
           quickLinks: saved?.quickLinks?.length ? saved.quickLinks : defaultQuickLinks,
         };
       },

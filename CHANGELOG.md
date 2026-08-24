@@ -2,6 +2,15 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.1.2] - 2026-08-24
+
+### Added
+
+- English and Simplified Chinese in-product language switch with inline SVG flags and local persistence.
+- 豆包, Kimi, 通义千问, and 腾讯元宝 as China AI destinations with safe clipboard handoff.
+- 百度 as a first-class search engine and `/baidu` slash command.
+- Drag-and-drop ordering for AI providers and search engines in Settings; the saved order drives the command-bar picker.
+
 ## [0.1.1] - 2026-08-24
 
 ### Added

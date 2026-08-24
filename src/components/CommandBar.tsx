@@ -17,7 +17,7 @@ import {
   Globe2,
   Search,
 } from 'lucide-react';
-import { aiProviders, searchEngines } from '../data/catalog';
+import { aiProviderIds, aiProviders, getDestination, searchEngineIds, searchEngines } from '../data/catalog';
 import {
   commandMatches,
   resolveInput,
@@ -25,6 +25,7 @@ import {
 } from '../lib/command';
 import type { AiProviderId, Destination, Mode, SearchEngineId } from '../types';
 import { BrandIcon } from './BrandIcon';
+import { useI18n } from '../i18n';
 
 interface Suggestion {
   id: string;
@@ -37,17 +38,19 @@ interface Suggestion {
 interface DestinationPickerProps {
   mode: Mode;
   selectedId: AiProviderId | SearchEngineId;
+  destinationOrder: Array<AiProviderId | SearchEngineId>;
   onSelect: (id: AiProviderId | SearchEngineId) => void;
 }
 
-function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProps) {
+function DestinationPicker({ mode, selectedId, destinationOrder, onSelect }: DestinationPickerProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const destinations = useMemo(
-    () => Object.values(mode === 'ai' ? aiProviders : searchEngines),
-    [mode],
+  const destinations = useMemo<Destination[]>(
+    () => destinationOrder.map((id) => getDestination(mode, id)).filter((item): item is Destination => Boolean(item)),
+    [destinationOrder, mode],
   );
   const selected = destinations.find((destination) => destination.id === selectedId) ?? destinations[0];
 
@@ -98,7 +101,7 @@ function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProp
         className="destination-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`Current ${mode === 'ai' ? 'AI provider' : 'search engine'}: ${selected.name}`}
+        aria-label={mode === 'ai' ? t('command.askWith', { name: selected.name }) : t('command.searchWith', { name: selected.name })}
         onClick={() => (open ? setOpen(false) : openPicker())}
         onKeyDown={(event) => {
           if (event.key === 'ArrowDown') {
@@ -118,7 +121,7 @@ function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProp
             ref={menuRef}
             className="destination-menu"
             role="listbox"
-            aria-label={mode === 'ai' ? 'AI providers' : 'Search engines'}
+            aria-label={mode === 'ai' ? t('picker.aiLabel') : t('picker.searchLabel')}
             tabIndex={-1}
             initial={{ opacity: 0, y: -6, scale: 0.985, filter: 'blur(5px)' }}
             animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
@@ -126,7 +129,7 @@ function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProp
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
             onKeyDown={handleMenuKeyDown}
           >
-            <div className="picker-label">{mode === 'ai' ? 'Ask with' : 'Search with'}</div>
+            <div className="picker-label">{mode === 'ai' ? t('picker.ai') : t('picker.search')}</div>
             {destinations.map((destination, index) => (
               <button
                 type="button"
@@ -145,7 +148,7 @@ function DestinationPicker({ mode, selectedId, onSelect }: DestinationPickerProp
                 </span>
                 <span className="picker-copy">
                   <strong>{destination.name}</strong>
-                  {destination.note && <small>Copies prompt</small>}
+                  {destination.note && <small>{t('picker.copies')}</small>}
                 </span>
                 {destination.id === selectedId && <Check aria-hidden="true" size={15} />}
               </button>
@@ -162,6 +165,8 @@ interface CommandBarProps {
   mode: Mode;
   aiProvider: AiProviderId;
   searchEngine: SearchEngineId;
+  aiProviderOrder?: AiProviderId[];
+  searchEngineOrder?: SearchEngineId[];
   onModeChange: (mode: Mode) => void;
   onAiProviderChange: (provider: AiProviderId) => void;
   onSearchEngineChange: (engine: SearchEngineId) => void;
@@ -173,16 +178,21 @@ export function CommandBar({
   mode,
   aiProvider,
   searchEngine,
+  aiProviderOrder,
+  searchEngineOrder,
   onModeChange,
   onAiProviderChange,
   onSearchEngineChange,
   onAction,
 }: CommandBarProps) {
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const destination = mode === 'ai' ? aiProviders[aiProvider] : searchEngines[searchEngine];
+  const effectiveAiProviderOrder = aiProviderOrder ?? aiProviderIds;
+  const effectiveSearchEngineOrder = searchEngineOrder ?? searchEngineIds;
 
   const suggestions = useMemo<Suggestion[]>(() => {
     const value = query.trim();
@@ -318,8 +328,8 @@ export function CommandBar({
   };
 
   return (
-    <section className="command-stage" aria-label="Universal command bar">
-      <div className="mode-switch" role="tablist" aria-label="Command mode">
+    <section className="command-stage" aria-label={t('command.stage')}>
+      <div className="mode-switch" role="tablist" aria-label={t('command.mode')}>
         {(['ai', 'search'] as const).map((item) => (
           <button
             type="button"
@@ -336,7 +346,7 @@ export function CommandBar({
                 transition={{ type: 'spring', stiffness: 480, damping: 38, mass: 0.7 }}
               />
             )}
-            <span className="mode-label">{item === 'ai' ? 'AI' : 'Search'}</span>
+            <span className="mode-label">{item === 'ai' ? t('mode.ai') : t('mode.search')}</span>
           </button>
         ))}
         <span className="mode-tab-hint">Tab</span>
@@ -347,6 +357,7 @@ export function CommandBar({
           <DestinationPicker
             mode={mode}
             selectedId={mode === 'ai' ? aiProvider : searchEngine}
+            destinationOrder={mode === 'ai' ? effectiveAiProviderOrder : effectiveSearchEngineOrder}
             onSelect={(id) => {
               if (mode === 'ai') onAiProviderChange(id as AiProviderId);
               else onSearchEngineChange(id as SearchEngineId);
@@ -361,11 +372,11 @@ export function CommandBar({
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}
-            aria-label={mode === 'ai' ? `Ask ${destination.name}` : `Search with ${destination.name}`}
+            aria-label={mode === 'ai' ? t('command.askWith', { name: destination.name }) : t('command.searchWith', { name: destination.name })}
             aria-autocomplete="list"
             aria-controls="command-suggestions"
             aria-activedescendant={showSuggestions ? `suggestion-${suggestions[boundedIndex]?.id}` : undefined}
-            placeholder={mode === 'ai' ? 'Ask anything…' : 'Search anything…'}
+            placeholder={mode === 'ai' ? t('command.ask') : t('command.search')}
             onChange={(event) => {
               setQuery(event.target.value);
               setActiveIndex(0);
@@ -430,20 +441,20 @@ export function CommandBar({
                 );
               })}
               <div className="suggestion-footer">
-                <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-                <span><kbd>Esc</kbd> Close</span>
+                <span><kbd>↑</kbd><kbd>↓</kbd> {t('suggest.navigate')}</span>
+                <span><kbd>Esc</kbd> {t('suggest.close')}</span>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <div className="context-chips" aria-label="Command shortcuts">
+      <div className="context-chips" aria-label={t('command.shortcuts')}>
         <button type="button" onClick={() => { onModeChange('ai'); inputRef.current?.focus(); }}>
-          <BrandIcon icon={aiProviders[aiProvider].icon} size={13} /> Ask AI
+          <BrandIcon icon={aiProviders[aiProvider].icon} size={13} /> {t('chip.ai')}
         </button>
         <button type="button" onClick={() => { onModeChange('search'); inputRef.current?.focus(); }}>
-          <Search size={13} /> Search web
+          <Search size={13} /> {t('chip.search')}
         </button>
         <button type="button" onClick={() => { onModeChange('search'); onSearchEngineChange('youtube'); inputRef.current?.focus(); }}>
           <BrandIcon icon="youtube" size={13} /> YouTube

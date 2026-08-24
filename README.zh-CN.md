@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [观看实机演示](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![测试](https://img.shields.io/badge/tests-43%20passed-4c8b61?style=flat-square)
+  ![测试](https://img.shields.io/badge/tests-46%20passed-4c8b61?style=flat-square)
   ![权限](https://img.shields.io/badge/permission-storage%20only-c4933f?style=flat-square)
   ![许可证](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -32,7 +32,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.1.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.2.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。
@@ -54,7 +54,7 @@ npm run build
 
 | AI | 搜索 |
 | --- | --- |
-| ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek | Google、Bing、DuckDuckGo、Brave、YouTube、GitHub、Reddit、哔哩哔哩、知乎、小红书、淘宝 |
+| ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek、豆包、Kimi、通义千问、腾讯元宝 | Google、百度、Bing、DuckDuckGo、Brave、YouTube、GitHub、Reddit、哔哩哔哩、知乎、小红书、淘宝 |
 
 有稳定查询链接的平台会直接接收内容；没有稳定链接的平台由 NOVA 复制提示词并打开官网，用户自行粘贴，整个过程不经过 NOVA 服务器。
 

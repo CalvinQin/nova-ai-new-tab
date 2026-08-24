@@ -23,6 +23,7 @@ import { GripHorizontal, MoreHorizontal, Plus } from 'lucide-react';
 import { MAX_QUICK_LINKS } from '../data/catalog';
 import type { QuickLink } from '../types';
 import { BrandIcon } from './BrandIcon';
+import { useI18n } from '../i18n';
 
 interface QuickLinkTileProps {
   link: QuickLink;
@@ -33,12 +34,13 @@ interface QuickLinkTileProps {
 }
 
 function QuickLinkTile({ link, lifted, onOpen, onEdit, dragHandle }: QuickLinkTileProps) {
+  const { t } = useI18n();
   return (
     <div className={lifted ? 'quick-link is-lifted' : 'quick-link'}>
       <button
         type="button"
         className="quick-link-main"
-        aria-label={`Open ${link.name}`}
+        aria-label={t('quick.open', { name: link.name })}
         onClick={() => onOpen?.(link)}
       >
         <span
@@ -53,7 +55,7 @@ function QuickLinkTile({ link, lifted, onOpen, onEdit, dragHandle }: QuickLinkTi
         <button
           type="button"
           className="quick-link-edit"
-          aria-label={`Edit ${link.name}`}
+          aria-label={t('quick.edit', { name: link.name })}
           onClick={(event) => {
             event.stopPropagation();
             onEdit(link);
@@ -73,6 +75,7 @@ interface SortableQuickLinkProps extends QuickLinkTileProps {
 }
 
 function SortableQuickLink({ link, onOpen, onEdit }: SortableQuickLinkProps) {
+  const { t } = useI18n();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id });
 
   return (
@@ -94,7 +97,7 @@ function SortableQuickLink({ link, onOpen, onEdit }: SortableQuickLinkProps) {
           <button
             type="button"
             className="quick-link-drag"
-            aria-label={`Reorder ${link.name}`}
+            aria-label={t('quick.reorder', { name: link.name })}
             {...attributes}
             {...listeners}
           >
@@ -115,6 +118,7 @@ interface QuickLinksProps {
 }
 
 export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLinksProps) {
+  const { t } = useI18n();
   const [activeLink, setActiveLink] = useState<QuickLink | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 7 } }),
@@ -135,7 +139,7 @@ export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLin
 
   return (
     <section className="quick-links-section" aria-labelledby="quick-links-title">
-      <div className="section-kicker" id="quick-links-title">Quick links</div>
+      <div className="section-kicker" id="quick-links-title">{t('section.quickLinks')}</div>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -158,9 +162,9 @@ export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLin
           </SortableContext>
           {links.length < MAX_QUICK_LINKS && (
             <div className="quick-link add-link">
-              <button type="button" className="quick-link-main" onClick={onAdd} aria-label="Add quick link">
+              <button type="button" className="quick-link-main" onClick={onAdd} aria-label={t('quick.addLabel')}>
                 <span className="quick-link-icon"><Plus aria-hidden="true" size={21} strokeWidth={1.6} /></span>
-                <span className="quick-link-name">Add</span>
+                <span className="quick-link-name">{t('quick.add')}</span>
               </button>
             </div>
           )}
