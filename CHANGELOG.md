@@ -2,6 +2,12 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.1.3] - 2026-08-24
+
+### Fixed
+
+- Kept the command bar in the same layout slot when Focus Mode is toggled, eliminating the vertical re-centering jump. Focus Mode now hides surrounding content without unmounting it or applying a separate offset.
+
 ## [0.1.2] - 2026-08-24
 
 ### Added

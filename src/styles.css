@@ -1116,12 +1116,14 @@ kbd {
   font-style: normal;
 }
 
-.is-focus-mode .main-content {
-  transform: translateY(-3vh);
-}
-
 .is-focus-mode .launcher {
   width: 100%;
+}
+
+.is-focus-mode .greeting,
+.is-focus-mode .secondary-content {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .is-focus-mode .page-footer {

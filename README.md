@@ -32,7 +32,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 
 ### From a release
 
-1. Download `nova-ai-new-tab-v0.1.2.zip` from [Releases](../../releases).
+1. Download `nova-ai-new-tab-v0.1.3.zip` from [Releases](../../releases).
 2. Unzip it.
 3. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 4. Enable **Developer mode**.

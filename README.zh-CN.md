@@ -32,7 +32,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.2.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.1.3.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。

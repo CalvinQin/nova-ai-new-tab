@@ -270,9 +270,11 @@ export default function App() {
 
         <main id="main-content" className="main-content">
           <AnimatePresence initial={false}>
-            {settings.showGreeting && !focusMode && (
+            {settings.showGreeting && (
               <motion.div
                 className="greeting"
+                aria-hidden={focusMode || undefined}
+                inert={focusMode ? true : undefined}
                 initial={{ opacity: 0, y: 8, filter: 'blur(5px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
@@ -306,28 +308,27 @@ export default function App() {
           </motion.div>
 
           <AnimatePresence initial={false}>
-            {!focusMode && (
-              <motion.div
-                className="secondary-content"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {settings.showShortcuts && (
-                  <QuickLinks
-                    links={quickLinks}
-                    onReorder={reorderQuickLinks}
-                    onOpen={openQuickLink}
-                    onEdit={setEditingShortcut}
-                    onAdd={openNewShortcut}
-                  />
-                )}
-                {settings.showRecent && (
-                  <RecentStrip recents={recents} quickLinks={quickLinks} onOpen={openRecent} />
-                )}
-              </motion.div>
-            )}
+            <motion.div
+              className="secondary-content"
+              aria-hidden={focusMode || undefined}
+              inert={focusMode ? true : undefined}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {settings.showShortcuts && (
+                <QuickLinks
+                  links={quickLinks}
+                  onReorder={reorderQuickLinks}
+                  onOpen={openQuickLink}
+                  onEdit={setEditingShortcut}
+                  onAdd={openNewShortcut}
+                />
+              )}
+              {settings.showRecent && (
+                <RecentStrip recents={recents} quickLinks={quickLinks} onOpen={openRecent} />
+              )}
+            </motion.div>
           </AnimatePresence>
         </main>
 
