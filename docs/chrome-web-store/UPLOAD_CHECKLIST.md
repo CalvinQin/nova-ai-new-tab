@@ -14,22 +14,27 @@ The ZIP has `manifest.json` at its root, includes English and Simplified Chinese
 
 ## 2. Store listing / 商品详情
 
-Copy the English and Simplified Chinese title, summary, and detailed description from `STORE_LISTING.md`.
+On the current English listing page, paste the English **Detailed description** from `STORE_LISTING.md`; it is required even though the package already supplies the title and summary. Keep the dashboard category set to **Tools / 工具**.
 
-Upload these assets in order:
+Required assets:
 
 1. `nova-store-icon-128.png`
-2. `nova-screenshot-01-light.png`
-3. `nova-screenshot-02-suggestions.png`
-4. `nova-screenshot-03-command-dark.png`
-5. `nova-screenshot-04-settings.png`
-6. `nova-screenshot-05-focus.png`
-7. `nova-promo-small-440x280.png`
-8. `nova-promo-marquee-1400x560.png`
+2. At least one of `nova-screenshot-01-light.png` through `nova-screenshot-05-focus.png`
+
+The small promo tile and marquee tile are optional. Add the remaining screenshots and these two promo assets when a richer storefront presentation is desired:
+
+1. `nova-screenshot-02-suggestions.png`
+2. `nova-screenshot-03-command-dark.png`
+3. `nova-screenshot-04-settings.png`
+4. `nova-screenshot-05-focus.png`
+5. `nova-promo-small-440x280.png`
+6. `nova-promo-marquee-1400x560.png`
+
+The package localizes its name and summary. If the dashboard offers an additional Simplified Chinese listing language, add `zh_CN` and copy the Chinese title, summary, and detailed description from `STORE_LISTING.md`; otherwise the English detailed description is the required current field.
 
 Use:
 
-- Category: Productivity
+- Category: Tools / 工具
 - Homepage: `https://github.com/CalvinQin/nova-ai-new-tab`
 - Support: `https://github.com/CalvinQin/nova-ai-new-tab/issues`
 - Privacy policy: `https://github.com/CalvinQin/nova-ai-new-tab/blob/main/PRIVACY.md`
@@ -51,8 +56,8 @@ Do not mark prompts or searches as stored by NOVA. They are processed transientl
 
 - Confirm the uploaded package reports version `0.1.1`.
 - Confirm the only extension permission is `storage`.
-- Confirm all five screenshots are visible and uncropped.
-- Confirm the English and Simplified Chinese listings are both saved.
+- Confirm at least one global screenshot is visible and uncropped; add up to five when desired.
+- Confirm the English detailed description is saved. Confirm the Simplified Chinese listing only if that dashboard locale has been added.
 - Choose automatic publishing after approval unless staged publishing is specifically preferred.
 - Submit for review only after the dashboard shows no missing required field.
 

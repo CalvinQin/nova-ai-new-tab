@@ -6,7 +6,7 @@ Prepared against the official Chrome Web Store publishing, listing-image, and pr
 
 - Default language: English
 - Additional locale: 简体中文 (`zh_CN`)
-- Category: Productivity / 工作流程与规划
+- Category: Tools / 工具
 - Homepage: `https://github.com/CalvinQin/nova-ai-new-tab`
 - Support: `https://github.com/CalvinQin/nova-ai-new-tab/issues`
 - Privacy policy: `https://github.com/CalvinQin/nova-ai-new-tab/blob/main/PRIVACY.md`
@@ -107,5 +107,5 @@ No paid service, test account, external hardware, or special environment is requ
 - `assets/nova-screenshot-03-command-dark.png` — 1280×800 PNG
 - `assets/nova-screenshot-04-settings.png` — 1280×800 PNG
 - `assets/nova-screenshot-05-focus.png` — 1280×800 PNG
-- `assets/nova-promo-small-440x280.png` — required small promo tile
+- `assets/nova-promo-small-440x280.png` — optional small promo tile
 - `assets/nova-promo-marquee-1400x560.png` — optional marquee tile
