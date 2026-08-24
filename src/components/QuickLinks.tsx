@@ -1,24 +1,18 @@
-import { useState } from 'react';
 import {
   DndContext,
-  DragOverlay,
-  KeyboardSensor,
   PointerSensor,
   closestCenter,
   useSensor,
   useSensors,
   type DragEndEvent,
-  type DragStartEvent,
 } from '@dnd-kit/core';
 import {
   SortableContext,
   arrayMove,
-  rectSortingStrategy,
-  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { motion } from 'framer-motion';
 import { GripHorizontal, MoreHorizontal, Plus } from 'lucide-react';
 import { MAX_QUICK_LINKS } from '../data/catalog';
 import type { QuickLink } from '../types';
@@ -27,16 +21,15 @@ import { useI18n } from '../i18n';
 
 interface QuickLinkTileProps {
   link: QuickLink;
-  lifted?: boolean;
   onOpen?: (link: QuickLink) => void;
   onEdit?: (link: QuickLink) => void;
   dragHandle?: React.ReactNode;
 }
 
-function QuickLinkTile({ link, lifted, onOpen, onEdit, dragHandle }: QuickLinkTileProps) {
+function QuickLinkTile({ link, onOpen, onEdit, dragHandle }: QuickLinkTileProps) {
   const { t } = useI18n();
   return (
-    <div className={lifted ? 'quick-link is-lifted' : 'quick-link'}>
+    <div className="quick-link">
       <button
         type="button"
         className="quick-link-main"
@@ -72,17 +65,17 @@ function QuickLinkTile({ link, lifted, onOpen, onEdit, dragHandle }: QuickLinkTi
 
 interface SortableQuickLinkProps extends QuickLinkTileProps {
   link: QuickLink;
+  onKeyboardMove: (direction: -1 | 1) => void;
 }
 
-function SortableQuickLink({ link, onOpen, onEdit }: SortableQuickLinkProps) {
+function SortableQuickLink({ link, onOpen, onEdit, onKeyboardMove }: SortableQuickLinkProps) {
   const { t } = useI18n();
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id });
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id });
 
   return (
-    <motion.div
+    <div
       ref={setNodeRef}
       className="quick-link-sortable"
-      layout
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
@@ -96,16 +89,28 @@ function SortableQuickLink({ link, onOpen, onEdit }: SortableQuickLinkProps) {
         dragHandle={(
           <button
             type="button"
+            ref={setActivatorNodeRef}
             className="quick-link-drag"
             aria-label={t('quick.reorder', { name: link.name })}
             {...attributes}
             {...listeners}
+            aria-keyshortcuts="ArrowLeft ArrowRight"
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                onKeyboardMove(-1);
+              }
+              if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                onKeyboardMove(1);
+              }
+            }}
           >
             <GripHorizontal aria-hidden="true" size={12} />
           </button>
         )}
       />
-    </motion.div>
+    </div>
   );
 }
 
@@ -119,22 +124,20 @@ interface QuickLinksProps {
 
 export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLinksProps) {
   const { t } = useI18n();
-  const [activeLink, setActiveLink] = useState<QuickLink | null>(null);
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 7 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-
-  const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveLink(links.find((link) => link.id === active.id) ?? null);
-  };
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 7 } }));
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    setActiveLink(null);
     if (!over || active.id === over.id) return;
     const oldIndex = links.findIndex((link) => link.id === active.id);
     const newIndex = links.findIndex((link) => link.id === over.id);
     if (oldIndex >= 0 && newIndex >= 0) onReorder(arrayMove(links, oldIndex, newIndex));
+  };
+
+  const moveByKeyboard = (link: QuickLink, direction: -1 | 1) => {
+    const oldIndex = links.findIndex((item) => item.id === link.id);
+    const newIndex = oldIndex + direction;
+    if (oldIndex < 0 || newIndex < 0 || newIndex >= links.length) return;
+    onReorder(arrayMove(links, oldIndex, newIndex));
   };
 
   return (
@@ -143,22 +146,11 @@ export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLin
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragCancel={() => setActiveLink(null)}
         onDragEnd={handleDragEnd}
       >
         <div className="quick-links-dock">
-          <SortableContext items={links.map((link) => link.id)} strategy={rectSortingStrategy}>
-            {links.map((link, index) => (
-              <motion.div
-                key={link.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.34, delay: Math.min(index, 7) * 0.035, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <SortableQuickLink link={link} onOpen={onOpen} onEdit={onEdit} />
-              </motion.div>
-            ))}
+          <SortableContext items={links.map((link) => link.id)} strategy={horizontalListSortingStrategy}>
+            {links.map((link) => <SortableQuickLink key={link.id} link={link} onOpen={onOpen} onEdit={onEdit} onKeyboardMove={(direction) => moveByKeyboard(link, direction)} />)}
           </SortableContext>
           {links.length < MAX_QUICK_LINKS && (
             <div className="quick-link add-link">
@@ -169,9 +161,6 @@ export function QuickLinks({ links, onReorder, onOpen, onEdit, onAdd }: QuickLin
             </div>
           )}
         </div>
-        <DragOverlay dropAnimation={{ duration: 180, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }}>
-          {activeLink ? <QuickLinkTile link={activeLink} lifted /> : null}
-        </DragOverlay>
       </DndContext>
     </section>
   );

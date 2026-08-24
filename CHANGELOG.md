@@ -2,6 +2,20 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.2.0] - 2026-08-24
+
+### Added
+
+- An optional local Server Pulse panel for up to two named servers, with up to three endpoint or port checks per server.
+- Server presets and visual identities for 宝塔, Cloudflare, Alibaba Cloud, DigitalOcean, Vercel, and custom services.
+- Explicit, user-initiated health checks. Endpoint origins are requested only when the user chooses **Connect & verify** or **Refresh**; no credential is stored or transmitted.
+
+### Fixed
+
+- Reworked quick-link sorting so dnd-kit alone owns the sortable node's transform, while the drag handle is registered as the activator. This removes the transform contention that caused visual drift.
+- Constrained quick-link reordering to one horizontal axis and made keyboard movement deterministic by adjacent position.
+- Softened ambient motion and removed blur-heavy Settings transitions for a steadier, less distracting interface.
+
 ## [0.1.3] - 2026-08-24
 
 ### Fixed

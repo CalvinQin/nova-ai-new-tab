@@ -14,6 +14,7 @@ const manifest = JSON.parse(
   permissions: string[];
   chrome_url_overrides: { newtab: string };
   host_permissions?: string[];
+  optional_host_permissions?: string[];
   content_security_policy: { extension_pages: string };
 };
 
@@ -37,9 +38,10 @@ describe('Chrome extension manifest', () => {
     expect(chineseMessages.extensionDescription.message.length).toBeLessThanOrEqual(132);
   });
 
-  it('requests only local storage and no host access', () => {
+  it('requests local storage by default and makes health-check host access optional', () => {
     expect(manifest.permissions).toEqual(['storage']);
     expect(manifest.host_permissions).toBeUndefined();
+    expect(manifest.optional_host_permissions).toEqual(['http://*/*', 'https://*/*']);
   });
 
   it('keeps scripts self-hosted under extension CSP', () => {

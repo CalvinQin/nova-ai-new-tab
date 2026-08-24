@@ -24,6 +24,10 @@ const defaultSettings: NovaSettings = {
   language: 'en',
   aiProviderOrder: aiProviderIds,
   searchEngineOrder: searchEngineIds,
+  serverMonitor: {
+    enabled: true,
+    servers: [],
+  },
 };
 
 function normalizeOrder<T extends string>(saved: T[] | undefined, available: T[]): T[] {

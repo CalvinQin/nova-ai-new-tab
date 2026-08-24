@@ -3,9 +3,25 @@ import type {
   Destination,
   QuickLink,
   SearchEngineId,
+  ServerProvider,
 } from '../types';
 
 export const MAX_QUICK_LINKS = 12;
+export const MAX_MONITORED_SERVERS = 2;
+export const MAX_PORTS_PER_SERVER = 3;
+
+export const serverProviders: Array<{
+  id: ServerProvider;
+  name: string;
+  color: string;
+}> = [
+  { id: 'baota', name: '宝塔', color: '#20a53a' },
+  { id: 'cloudflare', name: 'Cloudflare', color: '#f6821f' },
+  { id: 'alibaba-cloud', name: '阿里云', color: '#ff6a00' },
+  { id: 'digitalocean', name: 'DigitalOcean', color: '#0080ff' },
+  { id: 'vercel', name: 'Vercel', color: '#141414' },
+  { id: 'custom', name: 'Custom', color: '#7a7f78' },
+];
 
 export const aiProviderIds: AiProviderId[] = [
   'chatgpt', 'claude', 'gemini', 'perplexity', 'grok', 'deepseek',

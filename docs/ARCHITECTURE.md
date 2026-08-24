@@ -76,6 +76,7 @@ Persisted with `chrome.storage.local`:
 - appearance and visibility preferences;
 - selected mode, AI provider, and search engine;
 - shortcut names, URLs, and icon URLs;
+- optional Server Pulse display configuration, endpoint URLs, health labels, latency, and check times;
 - recent destination labels and safe destination URLs.
 
 Never persisted by NOVA:
@@ -85,7 +86,7 @@ Never persisted by NOVA:
 - page contents;
 - credentials, cookies, or browsing history.
 
-The extension has no backend, analytics, background worker, host permissions, or remotely executed code. The storage adapter falls back to browser `localStorage` only for source previews and automated tests.
+The extension has no backend, analytics, background worker, or remotely executed code. Server Pulse declares optional HTTP/HTTPS host access, but requests exact configured origins only after the user presses **Connect & verify** or **Refresh**. Each probe is a direct, transient browser `GET`; NOVA never handles credentials or proxies the request. The storage adapter falls back to browser `localStorage` only for source previews and automated tests.
 
 ## Extension points / 扩展点
 
@@ -101,7 +102,7 @@ Bookmark search remains deferred because the product brief marks it optional and
 
 - `package.json` and `public/manifest.json` versions must match.
 - `manifest.json` must remain at the root of the release ZIP.
-- Only `storage` may appear in extension permissions unless a reviewed feature explicitly changes that boundary.
+- `storage` is the only default extension permission. Optional host access is permitted only for the user-initiated Server Pulse flow and must remain documented in the privacy policy and Web Store listing.
 - English is the default manifest locale; Simplified Chinese is provided through `_locales/zh_CN`.
 - The release ZIP must pass `unzip -t`, and its downloaded GitHub copy must match the local SHA-256.
 - Store screenshots must show the actual packaged extension, not a static mockup.

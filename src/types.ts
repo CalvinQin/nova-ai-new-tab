@@ -27,6 +27,16 @@ export type SearchEngineId =
   | 'xiaohongshu'
   | 'taobao';
 
+export type ServerProvider =
+  | 'custom'
+  | 'baota'
+  | 'cloudflare'
+  | 'alibaba-cloud'
+  | 'digitalocean'
+  | 'vercel';
+
+export type HealthStatus = 'unknown' | 'checking' | 'healthy' | 'degraded' | 'offline';
+
 export type BrandIconKey =
   | AiProviderId
   | SearchEngineId
@@ -72,6 +82,31 @@ export interface RecentItem {
   timestamp: number;
 }
 
+export interface ServerPort {
+  id: string;
+  name: string;
+  url: string;
+  status: HealthStatus;
+  latency?: number;
+  checkedAt?: number;
+}
+
+export interface MonitoredServer {
+  id: string;
+  name: string;
+  provider: ServerProvider;
+  healthUrl: string;
+  status: HealthStatus;
+  latency?: number;
+  checkedAt?: number;
+  ports: ServerPort[];
+}
+
+export interface ServerMonitorSettings {
+  enabled: boolean;
+  servers: MonitoredServer[];
+}
+
 export interface NovaSettings {
   defaultMode: Mode;
   aiProvider: AiProviderId;
@@ -87,4 +122,5 @@ export interface NovaSettings {
   language: Language;
   aiProviderOrder: AiProviderId[];
   searchEngineOrder: SearchEngineId[];
+  serverMonitor: ServerMonitorSettings;
 }

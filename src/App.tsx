@@ -6,6 +6,7 @@ import { CommandPaletteDialog } from './components/CommandPaletteDialog';
 import { OnboardingDialog } from './components/OnboardingDialog';
 import { QuickLinks } from './components/QuickLinks';
 import { RecentStrip } from './components/RecentStrip';
+import { ServerStatusPanel } from './components/ServerStatusPanel';
 import { SettingsDialog, type SettingsSection } from './components/SettingsDialog';
 import { ShortcutDialog } from './components/ShortcutDialog';
 import { Toast, type ToastState } from './components/Toast';
@@ -15,6 +16,7 @@ import { MAX_QUICK_LINKS } from './data/catalog';
 import { useTheme } from './hooks/useTheme';
 import type { LocalCommand, ResolvedAction } from './lib/command';
 import { useNovaStore } from './store/useNovaStore';
+import { checkServer, endpointOriginPattern, requestServerAccess } from './lib/server-monitor';
 import type { AiProviderId, Language, Mode, QuickLink, RecentItem, SearchEngineId, Theme } from './types';
 
 const themeOrder: Theme[] = ['system', 'light', 'dark'];
@@ -70,6 +72,7 @@ export default function App() {
   const [editingShortcut, setEditingShortcut] = useState<QuickLink | 'new' | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
+  const [checkingServerIds, setCheckingServerIds] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const toastTimer = useRef<number | undefined>(undefined);
   const navigationTimer = useRef<number | undefined>(undefined);
@@ -205,6 +208,53 @@ export default function App() {
     }, 5000);
   }, [quickLinks, removeQuickLink, restoreQuickLink, showToast]);
 
+  const checkConfiguredServer = useCallback(async (serverId: string) => {
+    const server = settings.serverMonitor.servers.find((item) => item.id === serverId);
+    const chinese = settings.language === 'zh-CN';
+    if (!server || !endpointOriginPattern(server.healthUrl)) {
+      showToast(chinese ? '请先填写有效的 HTTP(S) 健康检查地址。' : 'Add a valid HTTP(S) health URL first.');
+      return;
+    }
+    const allowed = await requestServerAccess(server);
+    if (!allowed) {
+      showToast(chinese ? '浏览器未授予此服务器的访问权限。' : 'Browser access was not granted for this server.');
+      return;
+    }
+    setCheckingServerIds((current) => [...new Set([...current, serverId])]);
+    const currentMonitor = useNovaStore.getState().settings.serverMonitor;
+    updateSettings({
+      serverMonitor: {
+        ...currentMonitor,
+        servers: currentMonitor.servers.map((item) => item.id === serverId ? {
+          ...item,
+          status: 'checking',
+          ports: item.ports.map((port) => ({ ...port, status: endpointOriginPattern(port.url) ? 'checking' : 'unknown' })),
+        } : item),
+      },
+    });
+    try {
+      const checked = await checkServer(server);
+      const latestMonitor = useNovaStore.getState().settings.serverMonitor;
+      updateSettings({
+        serverMonitor: {
+          ...latestMonitor,
+          servers: latestMonitor.servers.map((item) => item.id === serverId ? {
+            ...item,
+            status: checked.status,
+            latency: checked.latency,
+            checkedAt: checked.checkedAt,
+            ports: item.ports.map((port) => {
+              const checkedPort = checked.ports.find((candidate) => candidate.id === port.id);
+              return checkedPort ? { ...port, status: checkedPort.status, latency: checkedPort.latency, checkedAt: checkedPort.checkedAt } : port;
+            }),
+          } : item),
+        },
+      });
+    } finally {
+      setCheckingServerIds((current) => current.filter((id) => id !== serverId));
+    }
+  }, [settings.language, settings.serverMonitor.servers, showToast, updateSettings]);
+
   useEffect(() => {
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       const modifier = event.metaKey || event.ctrlKey;
@@ -325,6 +375,12 @@ export default function App() {
                   onAdd={openNewShortcut}
                 />
               )}
+              <ServerStatusPanel
+                monitor={settings.serverMonitor}
+                refreshingServerIds={checkingServerIds}
+                onRefresh={(serverId) => { void checkConfiguredServer(serverId); }}
+                onConfigure={() => setSettingsSection('status')}
+              />
               {settings.showRecent && (
                 <RecentStrip recents={recents} quickLinks={quickLinks} onOpen={openRecent} />
               )}
@@ -364,6 +420,8 @@ export default function App() {
           onAddShortcut={() => { setSettingsSection(null); openNewShortcut(); }}
           onEditShortcut={(link) => { setSettingsSection(null); setEditingShortcut(link); }}
           onClearRecents={() => { clearRecents(); showToast('Recent destinations cleared.'); }}
+          onCheckServer={(serverId) => { void checkConfiguredServer(serverId); }}
+          checkingServerIds={checkingServerIds}
         />
       )}
 

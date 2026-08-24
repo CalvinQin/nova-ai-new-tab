@@ -15,6 +15,7 @@ import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordi
 import { CSS } from '@dnd-kit/utilities';
 import packageJson from '../../package.json';
 import {
+  Activity,
   Bot,
   Eye,
   GripVertical,
@@ -29,19 +30,23 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { aiProviders, MAX_QUICK_LINKS, searchEngines } from '../data/catalog';
+import { aiProviders, MAX_MONITORED_SERVERS, MAX_PORTS_PER_SERVER, MAX_QUICK_LINKS, searchEngines, serverProviders } from '../data/catalog';
 import type {
   Accent,
   AiProviderId,
   Destination,
   Language,
   Mode,
+  MonitoredServer,
   NovaSettings,
   QuickLink,
   SearchEngineId,
+  ServerPort,
+  ServerProvider,
   Theme,
 } from '../types';
 import { BrandIcon } from './BrandIcon';
+import { ServerVendorLogo } from './ServerVendorLogo';
 import { useI18n } from '../i18n';
 
 export type SettingsSection =
@@ -49,6 +54,7 @@ export type SettingsSection =
   | 'ai'
   | 'search'
   | 'shortcuts'
+  | 'status'
   | 'appearance'
   | 'privacy'
   | 'keyboard'
@@ -64,6 +70,8 @@ interface SettingsDialogProps {
   onAddShortcut: () => void;
   onEditShortcut: (link: QuickLink) => void;
   onClearRecents: () => void;
+  onCheckServer: (serverId: string) => void;
+  checkingServerIds: string[];
 }
 
 const sections: Array<{ id: SettingsSection; label: string; icon: typeof MonitorCog }> = [
@@ -71,6 +79,7 @@ const sections: Array<{ id: SettingsSection; label: string; icon: typeof Monitor
   { id: 'ai', label: 'AI', icon: Bot },
   { id: 'search', label: 'Search', icon: Search },
   { id: 'shortcuts', label: 'Shortcuts', icon: LayoutGrid },
+  { id: 'status', label: 'Status', icon: Activity },
   { id: 'appearance', label: 'Appearance', icon: Palette },
   { id: 'privacy', label: 'Privacy', icon: LockKeyhole },
   { id: 'keyboard', label: 'Keyboard', icon: Keyboard },
@@ -188,6 +197,8 @@ export function SettingsDialog({
   onAddShortcut,
   onEditShortcut,
   onClearRecents,
+  onCheckServer,
+  checkingServerIds,
 }: SettingsDialogProps) {
   const { t } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -213,9 +224,9 @@ export function SettingsDialog({
     >
       <motion.div
         className="dialog-surface settings-surface"
-        initial={{ opacity: 0, x: 24, filter: 'blur(7px)' }}
-        animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, x: 14 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
       >
         <header className="settings-header">
           <div>
@@ -238,7 +249,7 @@ export function SettingsDialog({
                 onClick={() => setSection(id)}
               >
                 <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
-                <span>{({ general: t('settings.general'), ai: t('settings.ai'), search: t('settings.search'), shortcuts: t('settings.shortcuts'), appearance: t('settings.appearance'), privacy: t('settings.privacy'), keyboard: t('settings.keyboard'), about: t('settings.about') } as Record<SettingsSection, string>)[id]}</span>
+                <span>{({ general: t('settings.general'), ai: t('settings.ai'), search: t('settings.search'), shortcuts: t('settings.shortcuts'), status: t('settings.status'), appearance: t('settings.appearance'), privacy: t('settings.privacy'), keyboard: t('settings.keyboard'), about: t('settings.about') } as Record<SettingsSection, string>)[id]}</span>
               </button>
             ))}
           </nav>
@@ -297,6 +308,15 @@ export function SettingsDialog({
                   {quickLinks.length >= MAX_QUICK_LINKS ? `Maximum of ${MAX_QUICK_LINKS} shortcuts reached` : 'Add shortcut'}
                 </button>
               </SettingsPane>
+            )}
+
+            {section === 'status' && (
+              <StatusMonitorEditor
+                settings={settings}
+                onUpdate={onUpdate}
+                onCheckServer={onCheckServer}
+                checkingServerIds={checkingServerIds}
+              />
             )}
 
             {section === 'appearance' && (
@@ -381,9 +401,9 @@ function SettingsPane({ title, description, children }: { title: string; descrip
     <motion.section
       className="settings-pane"
       aria-labelledby={`settings-${title.toLowerCase().replace(/\s+/g, '-')}`}
-      initial={{ opacity: 0, y: 5 }}
+      initial={{ opacity: 0, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
     >
       <header><h3 id={`settings-${title.toLowerCase().replace(/\s+/g, '-')}`}>{title}</h3><p>{description}</p></header>
       {children}
@@ -393,4 +413,90 @@ function SettingsPane({ title, description, children }: { title: string; descrip
 
 function KeyRow({ keys, label }: { keys: string[]; label: string }) {
   return <div className="key-row"><span>{label}</span><span>{keys.map((key) => <kbd key={key}>{key}</kbd>)}</span></div>;
+}
+
+function newId(prefix: string) {
+  return `${prefix}-${globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)}`;
+}
+
+function createServer(provider: ServerProvider = 'baota'): MonitoredServer {
+  const preset = serverProviders.find((item) => item.id === provider);
+  return {
+    id: newId('server'),
+    name: provider === 'custom' ? '' : `${preset?.name ?? 'Server'} server`,
+    provider,
+    healthUrl: '',
+    status: 'unknown',
+    ports: [],
+  };
+}
+
+function StatusMonitorEditor({ settings, onUpdate, onCheckServer, checkingServerIds }: Pick<SettingsDialogProps, 'settings' | 'onUpdate' | 'onCheckServer' | 'checkingServerIds'>) {
+  const { t } = useI18n();
+  const monitor = settings.serverMonitor;
+  const updateServers = (servers: MonitoredServer[]) => onUpdate({ serverMonitor: { ...monitor, servers: servers.slice(0, MAX_MONITORED_SERVERS) } });
+  const updateServer = (serverId: string, patch: Partial<MonitoredServer>) => updateServers(monitor.servers.map((server) => (
+    server.id === serverId ? { ...server, ...patch } : server
+  )));
+  const updatePort = (server: MonitoredServer, portId: string, patch: Partial<ServerPort>) => updateServer(server.id, {
+    ports: server.ports.map((port) => (port.id === portId ? { ...port, ...patch } : port)),
+  });
+
+  return (
+    <SettingsPane title={t('settings.status.title')} description={t('settings.status.desc')}>
+      <div className="settings-group">
+        <Toggle checked={monitor.enabled} onChange={(enabled) => onUpdate({ serverMonitor: { ...monitor, enabled } })} label={t('settings.status.show')} description={t('settings.status.showDesc')} />
+      </div>
+
+      <div className="server-config-list">
+        {monitor.servers.map((server) => (
+          <section className="server-config" key={server.id} aria-label={server.name || t('status.unnamed')}>
+            <header>
+              <span className="server-config-provider"><ServerVendorLogo provider={server.provider} size={18} /></span>
+              <strong>{server.name || t('status.unnamed')}</strong>
+              <button type="button" className="server-remove" onClick={() => updateServers(monitor.servers.filter((item) => item.id !== server.id))}>{t('settings.status.removeServer')}</button>
+            </header>
+
+            <div className="server-config-fields">
+              <label><span>{t('settings.status.name')}</span><input value={server.name} onChange={(event) => updateServer(server.id, { name: event.target.value })} placeholder={t('status.unnamed')} /></label>
+              <label className="server-health-field"><span>{t('settings.status.healthUrl')}</span><input value={server.healthUrl} inputMode="url" onChange={(event) => updateServer(server.id, { healthUrl: event.target.value, status: 'unknown', latency: undefined, checkedAt: undefined })} placeholder="https://api.example.com/health" /><small>{t('settings.status.healthHint')}</small></label>
+            </div>
+
+            <div className="provider-presets" role="radiogroup" aria-label={t('settings.status.provider')}>
+              {serverProviders.map((provider) => (
+                <button type="button" role="radio" aria-checked={server.provider === provider.id} className={server.provider === provider.id ? 'is-selected' : ''} key={provider.id} onClick={() => updateServer(server.id, { provider: provider.id })}>
+                  <ServerVendorLogo provider={provider.id} size={16} /> <span>{provider.name}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="server-port-settings">
+              <div><strong>{t('settings.status.ports')}</strong><small>{t('settings.status.portLimit')}</small></div>
+              {server.ports.map((port) => (
+                <div className="server-port-row" key={port.id}>
+                  <span className={`health-dot health-${port.status}`} aria-hidden="true" />
+                  <label><span className="sr-only">{t('settings.status.portName')}</span><input value={port.name} onChange={(event) => updatePort(server, port.id, { name: event.target.value })} placeholder="Web · 443" /></label>
+                  <label><span className="sr-only">{t('settings.status.portUrl')}</span><input value={port.url} inputMode="url" onChange={(event) => updatePort(server, port.id, { url: event.target.value, status: 'unknown', latency: undefined, checkedAt: undefined })} placeholder="https://app.example.com/health" /></label>
+                  <button type="button" aria-label={t('settings.status.removePort', { name: port.name || t('settings.status.portName') })} onClick={() => updateServer(server.id, { ports: server.ports.filter((item) => item.id !== port.id) })}><X aria-hidden="true" size={14} /></button>
+                </div>
+              ))}
+              <button type="button" className="server-add-port" disabled={server.ports.length >= MAX_PORTS_PER_SERVER} onClick={() => updateServer(server.id, { ports: [...server.ports, { id: newId('port'), name: '', url: '', status: 'unknown' }] })}>
+                <Plus aria-hidden="true" size={14} /> {t('settings.status.addPort')}
+              </button>
+            </div>
+            <button type="button" className="secondary-button server-connect" disabled={checkingServerIds.includes(server.id)} onClick={() => onCheckServer(server.id)}>
+              <Activity aria-hidden="true" size={15} /> {checkingServerIds.includes(server.id) ? t('status.checking') : t('settings.status.connect')}
+            </button>
+          </section>
+        ))}
+      </div>
+
+      <div className="server-add-row">
+        <button type="button" className="secondary-button" disabled={monitor.servers.length >= MAX_MONITORED_SERVERS} onClick={() => updateServers([...monitor.servers, createServer()])}>
+          <Plus aria-hidden="true" size={16} /> {t('settings.status.add')}
+        </button>
+        <small>{t('settings.status.limit')}</small>
+      </div>
+    </SettingsPane>
+  );
 }
