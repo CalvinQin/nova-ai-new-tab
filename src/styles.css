@@ -1274,6 +1274,87 @@ kbd {
   font-size: 0.67rem;
 }
 
+.system-pulse-actions {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.system-pulse-help {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-3);
+  background: transparent;
+}
+
+.system-pulse-help:hover,
+.system-pulse-help:focus-visible {
+  border-color: var(--line);
+  color: var(--text-1);
+  background: var(--surface-1);
+}
+
+.server-help-dialog { padding: 18px; }
+
+.server-help-surface {
+  width: min(580px, calc(100vw - 36px));
+  max-height: min(700px, calc(100vh - 36px));
+}
+
+.server-help-surface .dialog-header { align-items: flex-start; }
+
+.server-help-surface .dialog-header p {
+  max-width: 54ch;
+  margin: 7px 0 0;
+  color: var(--text-3);
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+.server-help-content {
+  overflow-y: auto;
+  max-height: min(510px, calc(100vh - 180px));
+  padding: 0 26px 25px;
+}
+
+.server-help-content li span,
+.server-help-examples small,
+.server-help-content > p { color: var(--text-3); font-size: 0.63rem; line-height: 1.55; }
+
+.server-help-content ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 2px 16px 16px 19px;
+}
+
+.server-help-content li { padding-left: 2px; }
+
+.server-help-content li strong,
+.server-help-content li span { display: block; }
+
+.server-help-content li strong { margin-bottom: 2px; color: var(--text-2); font-size: 0.67rem; font-weight: 600; }
+
+.server-help-examples {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--surface-2);
+}
+
+.server-help-examples > strong { color: var(--text-2); font-size: 0.66rem; }
+.server-help-examples span { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
+.server-help-examples small { flex: 0 0 58px; }
+.server-help-examples code { overflow: hidden; color: var(--text-2); font-size: 0.6rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.server-help-content > p { margin: 12px 0 0; }
+
 .recent-list {
   display: flex;
   gap: 4px;

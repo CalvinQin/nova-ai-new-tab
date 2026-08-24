@@ -1,4 +1,5 @@
-import { RefreshCw, Settings2 } from 'lucide-react';
+import { useRef } from 'react';
+import { CircleHelp, RefreshCw, Settings2, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { serverProviders } from '../data/catalog';
 import { useI18n } from '../i18n';
@@ -25,6 +26,7 @@ function statusKey(status: HealthStatus) {
 
 export function ServerStatusPanel({ monitor, refreshingServerIds, onRefresh, onConfigure }: ServerStatusPanelProps) {
   const { t, language } = useI18n();
+  const helpDialog = useRef<HTMLDialogElement>(null);
   const servers = monitor.servers.slice(0, 2);
   if (!monitor.enabled) return null;
 
@@ -41,9 +43,14 @@ export function ServerStatusPanel({ monitor, refreshingServerIds, onRefresh, onC
           <span className="system-pulse-kicker">{t('status.kicker')}</span>
           <h2 id="system-pulse-title">{t('status.title')}</h2>
         </div>
-        <button type="button" className="system-pulse-configure" onClick={onConfigure}>
-          <Settings2 aria-hidden="true" size={14} /> {t('status.configure')}
-        </button>
+        <div className="system-pulse-actions">
+          <button type="button" className="system-pulse-help" aria-label={t('settings.status.guideTitle')} onClick={() => helpDialog.current?.showModal()}>
+            <CircleHelp aria-hidden="true" size={16} />
+          </button>
+          <button type="button" className="system-pulse-configure" onClick={onConfigure}>
+            <Settings2 aria-hidden="true" size={14} /> {t('status.configure')}
+          </button>
+        </div>
       </header>
 
       {servers.length ? (
@@ -89,6 +96,31 @@ export function ServerStatusPanel({ monitor, refreshingServerIds, onRefresh, onC
           <p>{t('status.empty')}</p>
         </div>
       )}
+      <dialog ref={helpDialog} className="nova-dialog server-help-dialog" aria-labelledby="server-help-title" onClick={(event) => { if (event.target === event.currentTarget) helpDialog.current?.close(); }}>
+        <motion.div className="dialog-surface server-help-surface" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}>
+          <header className="dialog-header">
+            <div>
+              <span className="dialog-eyebrow">{t('status.kicker')}</span>
+              <h2 id="server-help-title">{t('settings.status.guideTitle')}</h2>
+              <p>{t('settings.status.guideDesc')}</p>
+            </div>
+            <button type="button" className="icon-button" aria-label={t('settings.closeHelp')} onClick={() => helpDialog.current?.close()}><X aria-hidden="true" size={17} /></button>
+          </header>
+          <div className="server-help-content">
+            <ol>
+              {([1, 2, 3, 4] as const).map((step) => (
+                <li key={step}><strong>{t(`settings.status.step${step}Title`)}</strong><span>{t(`settings.status.step${step}Body`)}</span></li>
+              ))}
+            </ol>
+            <div className="server-help-examples">
+              <strong>{t('settings.status.examples')}</strong>
+              <span><small>{t('settings.status.domainExample')}</small><code>https://price.example.com/health</code></span>
+              <span><small>{t('settings.status.ipExample')}</small><code>http://47.xxx.xxx.xxx:3000/health</code></span>
+            </div>
+            <p>{t('settings.status.guideNote')}</p>
+          </div>
+        </motion.div>
+      </dialog>
     </motion.section>
   );
 }

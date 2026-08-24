@@ -33,7 +33,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.2.0.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.2.1.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。
@@ -77,6 +77,8 @@ npm run build
 ## 隐私
 
 NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式、服务器监控配置和最近访问的**目标元数据**，明确不保存提示词或搜索内容。服务器端点访问为可选权限，只有点击“连接并检测”或“刷新”时才会申请。项目没有后端、后台 Worker、统计分析、远程代码或 AI API 凭证。详见 [PRIVACY.md](PRIVACY.md)。
+
+阿里云价格项目怎么接入，见[服务器状态小白说明](docs/SERVER-PULSE-GUIDE.md)：只需一个公开 HTTP(S) 健康网址，绝不填写 AccessKey、SSH 密码或宝塔登录信息。
 
 ## 开发与验证
 

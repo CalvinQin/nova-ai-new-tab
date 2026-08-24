@@ -33,7 +33,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 
 ### From a release
 
-1. Download `nova-ai-new-tab-v0.2.0.zip` from [Releases](../../releases).
+1. Download `nova-ai-new-tab-v0.2.1.zip` from [Releases](../../releases).
 2. Unzip it.
 3. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 4. Enable **Developer mode**.
@@ -77,6 +77,8 @@ Type `/` to discover commands such as `/chatgpt`, `/google`, `/youtube`, `/githu
 ## Privacy
 
 NOVA stores settings, quick links, server monitor configuration, and recent **destination metadata** locally with `chrome.storage.local`. It deliberately does not save prompt or search text. Server endpoint access is optional and requested only after you press **Connect & verify** or **Refresh**. NOVA has no backend, background worker, analytics, remote code, or AI API credentials. See [PRIVACY.md](PRIVACY.md).
+
+Need a plain-language Alibaba Cloud pricing-project walkthrough? See the [Server Pulse guide](docs/SERVER-PULSE-GUIDE.md). It uses only a public HTTP(S) health URL—never an AccessKey, SSH password, or panel login.
 
 ## Development
 

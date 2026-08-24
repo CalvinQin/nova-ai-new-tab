@@ -2,6 +2,17 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.2.1] - 2026-08-24
+
+### Added
+
+- A question-mark help button beside System Pulse. It opens a beginner-friendly Alibaba Cloud price-project walkthrough only when requested.
+- Safe placeholder examples for domain and public-IP health URLs, plus clear limits on what browser checks can and cannot test.
+
+### Changed
+
+- Moved the onboarding copy out of Settings so server configuration remains focused and no personal project details are ever placed in the interface or documentation.
+
 ## [0.2.0] - 2026-08-24
 
 ### Added
