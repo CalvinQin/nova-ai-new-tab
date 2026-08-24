@@ -73,8 +73,14 @@ const marqueePromo = Buffer.from(`
 
 await Promise.all([
   sharp(iconSource).png().toFile(path.join(outputDirectory, 'nova-store-icon-128.png')),
-  sharp(smallPromo).png().toFile(path.join(outputDirectory, 'nova-promo-small-440x280.png')),
-  sharp(marqueePromo).png().toFile(path.join(outputDirectory, 'nova-promo-marquee-1400x560.png')),
+  sharp(smallPromo)
+    .flatten({ background: '#080a08' })
+    .png()
+    .toFile(path.join(outputDirectory, 'nova-promo-small-440x280.png')),
+  sharp(marqueePromo)
+    .flatten({ background: '#070907' })
+    .png()
+    .toFile(path.join(outputDirectory, 'nova-promo-marquee-1400x560.png')),
 ]);
 
 const expected = new Map([
