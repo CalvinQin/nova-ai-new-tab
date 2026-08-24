@@ -36,6 +36,7 @@ export type ServerProvider =
   | 'vercel';
 
 export type HealthStatus = 'unknown' | 'checking' | 'healthy' | 'degraded' | 'offline';
+export type ServerRefreshInterval = 0 | 30_000 | 60_000 | 300_000;
 
 export type BrandIconKey =
   | AiProviderId
@@ -104,6 +105,7 @@ export interface MonitoredServer {
 
 export interface ServerMonitorSettings {
   enabled: boolean;
+  refreshInterval: ServerRefreshInterval;
   servers: MonitoredServer[];
 }
 

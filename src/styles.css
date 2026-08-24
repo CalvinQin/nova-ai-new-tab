@@ -1100,6 +1100,13 @@ kbd {
   letter-spacing: -0.01em;
 }
 
+.system-pulse-live {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-3);
+  font-size: 0.58rem;
+}
+
 .system-pulse-configure,
 .server-refresh,
 .server-remove,
@@ -1354,6 +1361,19 @@ kbd {
 .server-help-examples code { overflow: hidden; color: var(--text-2); font-size: 0.6rem; text-overflow: ellipsis; white-space: nowrap; }
 
 .server-help-content > p { margin: 12px 0 0; }
+
+.server-refresh-setting { gap: 16px; }
+
+.server-refresh-setting select {
+  min-width: 142px;
+  padding: 8px 28px 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-2);
+  background: var(--surface-1);
+  font: inherit;
+  font-size: 0.67rem;
+}
 
 .recent-list {
   display: flex;

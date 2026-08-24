@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [观看实机演示](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![测试](https://img.shields.io/badge/tests-49%20passed-4c8b61?style=flat-square)
+  ![测试](https://img.shields.io/badge/tests-50%20passed-4c8b61?style=flat-square)
   ![权限](https://img.shields.io/badge/permission-storage%20%2B%20on--demand%20host-4c8b61?style=flat-square)
   ![许可证](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -23,7 +23,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 - **直达官方平台，不做中转代理：** 支持 ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek、Google、GitHub、YouTube 等服务。
 - **键盘优先：** `⌘/Ctrl K` 聚焦输入框，`Tab` 切换 AI/搜索，`⌘/Ctrl ⇧ P` 打开命令面板。
 - **属于你的快捷入口：** 最多添加 12 个网站，支持编辑、删除、撤销与拖拽排序。
-- **安静的系统脉冲：** 可选展示最多 2 台服务器、每台最多 3 项端口/端点健康度，内置厂商预设并支持手动刷新。
+- **安静的系统脉冲：** 可选展示最多 2 台服务器、每台最多 3 项端口/端点健康度，内置厂商预设、真实 HTTP(S) 延迟和可见标签页实时刷新。
 - **克制而精致：** 支持浅色、深色、跟随系统、五种强调色、专注模式与减少动态效果。
 - **从设计上保护隐私：** 无统计分析、无 API Key、无提示词历史；只有你主动检测时才申请对应端点的访问权限。
 
@@ -33,7 +33,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.2.1.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.3.0.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。
@@ -76,7 +76,7 @@ npm run build
 
 ## 隐私
 
-NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式、服务器监控配置和最近访问的**目标元数据**，明确不保存提示词或搜索内容。服务器端点访问为可选权限，只有点击“连接并检测”或“刷新”时才会申请。项目没有后端、后台 Worker、统计分析、远程代码或 AI API 凭证。详见 [PRIVACY.md](PRIVACY.md)。
+NOVA 使用 `chrome.storage.local` 在本机保存设置、快捷方式、服务器监控配置和最近访问的**目标元数据**，明确不保存提示词或搜索内容。点击“连接并检测”并同意端点访问后，System Pulse 可在新标签页可见期间每 30 秒刷新一次 HTTP(S) 健康状态和延迟；可在设置中改频率或关闭。项目没有后端、后台 Worker、统计分析、远程代码或 AI API 凭证。详见 [PRIVACY.md](PRIVACY.md)。
 
 阿里云价格项目怎么接入，见[服务器状态小白说明](docs/SERVER-PULSE-GUIDE.md)：只需一个公开 HTTP(S) 健康网址，绝不填写 AccessKey、SSH 密码或宝塔登录信息。
 

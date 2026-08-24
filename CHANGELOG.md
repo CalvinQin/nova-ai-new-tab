@@ -2,6 +2,18 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.3.0] - 2026-08-24
+
+### Changed
+
+- Server Pulse now performs real, visibility-aware HTTP(S) health checks and measures each configured endpoint's request latency. After the user grants access, it refreshes every 30 seconds by default while the new-tab page is visible.
+- Added refresh controls for 30 seconds, 1 minute, 5 minutes, or manual-only mode; the active cadence appears beside the panel title.
+- Existing monitor settings migrate safely to the 30-second live-refresh default without adding any new default permissions.
+
+### Notes
+
+- Browser extensions cannot make raw TCP probes to SSH or database ports. Configure an HTTP(S) health endpoint for each port/service you want to display.
+
 ## [0.2.1] - 2026-08-24
 
 ### Added

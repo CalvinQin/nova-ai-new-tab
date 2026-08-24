@@ -86,7 +86,7 @@ Never persisted by NOVA:
 - page contents;
 - credentials, cookies, or browsing history.
 
-The extension has no backend, analytics, background worker, or remotely executed code. Server Pulse declares optional HTTP/HTTPS host access, but requests exact configured origins only after the user presses **Connect & verify** or **Refresh**. Each probe is a direct, transient browser `GET`; NOVA never handles credentials or proxies the request. The storage adapter falls back to browser `localStorage` only for source previews and automated tests.
+The extension has no backend, analytics, background worker, or remotely executed code. Server Pulse declares optional HTTP/HTTPS host access, but requests exact configured origins only after the user presses **Connect & verify**. Once approved, it refreshes direct browser `GET` probes while the new-tab page is visible (30 seconds by default, configurable to 1 minute, 5 minutes, or off). NOVA never handles credentials or proxies the request. The storage adapter falls back to browser `localStorage` only for source previews and automated tests.
 
 ## Extension points / 扩展点
 

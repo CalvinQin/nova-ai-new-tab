@@ -16,7 +16,7 @@ import { MAX_QUICK_LINKS } from './data/catalog';
 import { useTheme } from './hooks/useTheme';
 import type { LocalCommand, ResolvedAction } from './lib/command';
 import { useNovaStore } from './store/useNovaStore';
-import { checkServer, endpointOriginPattern, requestServerAccess } from './lib/server-monitor';
+import { checkServer, endpointOriginPattern, hasServerAccess, requestServerAccess } from './lib/server-monitor';
 import type { AiProviderId, Language, Mode, QuickLink, RecentItem, SearchEngineId, Theme } from './types';
 
 const themeOrder: Theme[] = ['system', 'light', 'dark'];
@@ -73,10 +73,13 @@ export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [checkingServerIds, setCheckingServerIds] = useState<string[]>([]);
+  const checkingServerSet = useRef(new Set<string>());
   const inputRef = useRef<HTMLInputElement>(null);
   const toastTimer = useRef<number | undefined>(undefined);
   const navigationTimer = useRef<number | undefined>(undefined);
   const pointerFrame = useRef<number | undefined>(undefined);
+  const serverMonitorRef = useRef(settings.serverMonitor);
+  serverMonitorRef.current = settings.serverMonitor;
 
   useTheme(settings.theme, settings.accent, settings.animations);
   useEffect(() => { document.documentElement.lang = settings.language === 'zh-CN' ? 'zh-CN' : 'en'; }, [settings.language]);
@@ -208,18 +211,21 @@ export default function App() {
     }, 5000);
   }, [quickLinks, removeQuickLink, restoreQuickLink, showToast]);
 
-  const checkConfiguredServer = useCallback(async (serverId: string) => {
-    const server = settings.serverMonitor.servers.find((item) => item.id === serverId);
-    const chinese = settings.language === 'zh-CN';
+  const checkConfiguredServer = useCallback(async (serverId: string, interactive = true) => {
+    if (checkingServerSet.current.has(serverId)) return;
+    const latestSettings = useNovaStore.getState().settings;
+    const server = latestSettings.serverMonitor.servers.find((item) => item.id === serverId);
+    const chinese = latestSettings.language === 'zh-CN';
     if (!server || !endpointOriginPattern(server.healthUrl)) {
-      showToast(chinese ? '请先填写有效的 HTTP(S) 健康检查地址。' : 'Add a valid HTTP(S) health URL first.');
+      if (interactive) showToast(chinese ? '请先填写有效的 HTTP(S) 健康检查地址。' : 'Add a valid HTTP(S) health URL first.');
       return;
     }
-    const allowed = await requestServerAccess(server);
+    const allowed = interactive ? await requestServerAccess(server) : await hasServerAccess(server);
     if (!allowed) {
-      showToast(chinese ? '浏览器未授予此服务器的访问权限。' : 'Browser access was not granted for this server.');
+      if (interactive) showToast(chinese ? '浏览器未授予此服务器的访问权限。' : 'Browser access was not granted for this server.');
       return;
     }
+    checkingServerSet.current.add(serverId);
     setCheckingServerIds((current) => [...new Set([...current, serverId])]);
     const currentMonitor = useNovaStore.getState().settings.serverMonitor;
     updateSettings({
@@ -251,9 +257,32 @@ export default function App() {
         },
       });
     } finally {
+      checkingServerSet.current.delete(serverId);
       setCheckingServerIds((current) => current.filter((id) => id !== serverId));
     }
-  }, [settings.language, settings.serverMonitor.servers, showToast, updateSettings]);
+  }, [showToast, updateSettings]);
+
+  const liveMonitorSignature = [
+    settings.serverMonitor.enabled,
+    settings.serverMonitor.refreshInterval,
+    ...settings.serverMonitor.servers.map((server) => [server.id, server.healthUrl, ...server.ports.map((port) => port.url)].join('|')),
+  ].join('::');
+
+  useEffect(() => {
+    const { enabled, refreshInterval, servers } = serverMonitorRef.current;
+    if (!enabled || refreshInterval === 0 || servers.length === 0) return;
+    const refreshVisibleServers = () => {
+      if (document.visibilityState !== 'visible') return;
+      servers.forEach((server) => { void checkConfiguredServer(server.id, false); });
+    };
+    refreshVisibleServers();
+    const intervalId = window.setInterval(refreshVisibleServers, refreshInterval);
+    document.addEventListener('visibilitychange', refreshVisibleServers);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', refreshVisibleServers);
+    };
+  }, [checkConfiguredServer, liveMonitorSignature]);
 
   useEffect(() => {
     const onKeyDown = (event: globalThis.KeyboardEvent) => {

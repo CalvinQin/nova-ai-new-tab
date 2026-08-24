@@ -39,7 +39,7 @@ Key features:
 - Choose light, dark, or system appearance, five restrained accents, reduced motion, and Focus Mode.
 - Keep settings and recent destination metadata on your device with no analytics or prompt history.
 
-NOVA requests Chrome's `storage` permission by default. Its Server Pulse feature requests optional access to the exact HTTP/HTTPS endpoint origins you configure only after you press **Connect & verify** or **Refresh**. It has no backend, background worker, remote code, advertising, analytics, or AI API credentials. Source code and privacy details are available from the project homepage.
+NOVA requests Chrome's `storage` permission by default. Its Server Pulse feature requests optional access to the exact HTTP/HTTPS endpoint origins you configure only after you press **Connect & verify**. Once approved, it can refresh health and latency while the new-tab page is visible at the cadence you choose. It has no backend, background worker, remote code, advertising, analytics, or AI API credentials. Source code and privacy details are available from the project homepage.
 
 ## 简体中文商店文案
 
@@ -66,7 +66,7 @@ NOVA 把浏览器新标签页变成一个安静、统一的命令入口。输入
 - 提供浅色、深色、跟随系统、五种克制强调色、减少动画和专注模式。
 - 设置和最近目标元数据仅保存在本机，无统计分析，也不保存提示词历史。
 
-NOVA 默认只申请 Chrome 的 `storage` 权限。服务器状态面板只会在你点击“连接并检测”或“刷新”后，为已配置的精确 HTTP/HTTPS 端点来源申请可选访问权限。项目没有后端、后台 Worker、远程代码、广告、统计分析或 AI API 凭证。源码和完整隐私说明可在项目主页查看。
+NOVA 默认只申请 Chrome 的 `storage` 权限。服务器状态面板只会在你点击“连接并检测”后，为已配置的精确 HTTP/HTTPS 端点来源申请可选访问权限。授权后，可在新标签页可见期间按你选择的频率刷新健康状态和延迟。项目没有后端、后台 Worker、远程代码、广告、统计分析或 AI API 凭证。源码和完整隐私说明可在项目主页查看。
 
 ## Privacy practices / 隐私披露
 
@@ -80,7 +80,7 @@ The `storage` permission saves the user's chosen mode, AI provider, search engin
 
 ### Optional host permission justification
 
-The optional `http://*/*` and `https://*/*` declarations allow a user-selected Server Pulse endpoint to be checked from the new-tab page. NOVA requests only the exact configured origins after a user clicks **Connect & verify** or **Refresh**; it does not check endpoints automatically, read page content, collect credentials, or proxy requests through a NOVA service.
+The optional `http://*/*` and `https://*/*` declarations allow a user-selected Server Pulse endpoint to be checked from the new-tab page. NOVA requests only the exact configured origins after a user clicks **Connect & verify**. Once authorized, it performs the user-selected interval only while the new-tab page is visible; it does not read page content, collect credentials, or proxy requests through a NOVA service.
 
 ### Remote code
 
@@ -90,7 +90,7 @@ No. All executable JavaScript and fonts are packaged with the extension. User-su
 
 - Stored locally: preferences, onboarding state, custom quick-link names/URLs/icons, and recent destination labels/origins.
 - Stored locally when Server Pulse is used: server label, provider, endpoint URLs, health label, latency, and check time.
-- Processed transiently when Server Pulse is used: a direct browser `GET` to the endpoint the user explicitly configured and approved.
+- Processed transiently when Server Pulse is used: a direct browser `GET` to the endpoint the user explicitly configured and approved, at the selected cadence while the new-tab page is visible.
 - Processed transiently: prompt/search text while the user is typing and when routing it to the destination selected by that user.
 - Not collected by a NOVA server: there is no NOVA backend, account system, analytics, telemetry, advertising, or developer access to local extension data.
 - Never sold, used for unrelated purposes, used for advertising or lending, or read by humans.

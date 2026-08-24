@@ -8,7 +8,7 @@
   [English](README.md) · [简体中文](README.zh-CN.md) · [Watch the real-browser demo](docs/assets/nova-demo.mp4)
 
   ![Manifest V3](https://img.shields.io/badge/Manifest-V3-232923?style=flat-square)
-  ![Tests](https://img.shields.io/badge/tests-49%20passed-4c8b61?style=flat-square)
+  ![Tests](https://img.shields.io/badge/tests-50%20passed-4c8b61?style=flat-square)
   ![Permission](https://img.shields.io/badge/permission-storage%20%2B%20on--demand%20host-4c8b61?style=flat-square)
   ![License](https://img.shields.io/badge/license-MIT-232923?style=flat-square)
 </div>
@@ -23,7 +23,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 - **Real destinations, no proxy:** NOVA hands work to ChatGPT, Claude, Gemini, Perplexity, Grok, DeepSeek, Google, GitHub, YouTube, and more.
 - **Built for the keyboard:** `⌘/Ctrl K` focuses the launcher, `Tab` switches AI/Search, and `⌘/Ctrl ⇧ P` opens the command palette.
 - **Your own launchpad:** add, edit, remove, undo, and drag up to 12 quick links.
-- **A quiet system pulse:** optionally check up to two of your servers and three endpoints per server, with named provider presets and on-demand refresh.
+- **A quiet system pulse:** optionally monitor up to two of your servers and three endpoints per server, with named provider presets, real HTTP(S) latency, and visible-tab live refresh.
 - **Calm by design:** light, dark, system themes, five restrained accents, Focus Mode, and reduced-motion support.
 - **Privacy by construction:** no analytics, no API keys, no prompt history, and endpoint access is requested only after you initiate a health check.
 
@@ -33,7 +33,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 
 ### From a release
 
-1. Download `nova-ai-new-tab-v0.2.1.zip` from [Releases](../../releases).
+1. Download `nova-ai-new-tab-v0.3.0.zip` from [Releases](../../releases).
 2. Unzip it.
 3. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 4. Enable **Developer mode**.
@@ -76,7 +76,7 @@ Type `/` to discover commands such as `/chatgpt`, `/google`, `/youtube`, `/githu
 
 ## Privacy
 
-NOVA stores settings, quick links, server monitor configuration, and recent **destination metadata** locally with `chrome.storage.local`. It deliberately does not save prompt or search text. Server endpoint access is optional and requested only after you press **Connect & verify** or **Refresh**. NOVA has no backend, background worker, analytics, remote code, or AI API credentials. See [PRIVACY.md](PRIVACY.md).
+NOVA stores settings, quick links, server monitor configuration, and recent **destination metadata** locally with `chrome.storage.local`. It deliberately does not save prompt or search text. After you press **Connect & verify** and approve an endpoint, Server Pulse can refresh its HTTP(S) health and latency every 30 seconds while the new tab is visible; the cadence is configurable or can be turned off. NOVA has no backend, background worker, analytics, remote code, or AI API credentials. See [PRIVACY.md](PRIVACY.md).
 
 Need a plain-language Alibaba Cloud pricing-project walkthrough? See the [Server Pulse guide](docs/SERVER-PULSE-GUIDE.md). It uses only a public HTTP(S) health URL—never an AccessKey, SSH password, or panel login.
 

@@ -24,6 +24,12 @@ export async function requestServerAccess(server: MonitoredServer): Promise<bool
   return chrome.permissions.request({ origins });
 }
 
+export async function hasServerAccess(server: MonitoredServer): Promise<boolean> {
+  const origins = serverOrigins(server);
+  if (!origins.length || typeof chrome === 'undefined' || !chrome.permissions?.contains) return origins.length > 0;
+  return chrome.permissions.contains({ origins });
+}
+
 export async function checkEndpoint(url: string): Promise<Pick<ServerPort, 'status' | 'latency' | 'checkedAt'>> {
   const checkedAt = Date.now();
   if (!endpointOriginPattern(url)) return { status: 'unknown', checkedAt };

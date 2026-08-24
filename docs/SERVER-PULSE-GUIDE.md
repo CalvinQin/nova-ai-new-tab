@@ -2,7 +2,7 @@
 
 ## English
 
-Server Pulse gives a small, on-demand health readout in your new tab. It is not a server-control panel: NOVA never asks for, stores, or uses an Alibaba Cloud account, AccessKey, SSH password, 宝塔 login, or database password.
+Server Pulse gives a small live health readout in your new tab. After you approve a configured endpoint, it checks while the tab is visible every 30 seconds by default; choose 1 minute, 5 minutes, or off in **Settings → Status**. It is not a server-control panel: NOVA never asks for, stores, or uses an Alibaba Cloud account, AccessKey, SSH password, 宝塔 login, or database password.
 
 ### Connect an Alibaba Cloud price project
 
@@ -30,7 +30,7 @@ Examples:
 
 ## 简体中文
 
-System Pulse 是新标签页里的小型、手动健康提示，不是服务器控制面板。NOVA 不会要求、保存或使用阿里云账号、AccessKey、SSH 密码、宝塔登录信息或数据库密码。
+System Pulse 是新标签页里的小型实时健康提示。端点首次授权后，只要新标签页可见，默认每 30 秒检测一次；可在 **设置 → 运行状态** 改为每 1 分钟、5 分钟或关闭。它不是服务器控制面板。NOVA 不会要求、保存或使用阿里云账号、AccessKey、SSH 密码、宝塔登录信息或数据库密码。
 
 ### 把阿里云上的价格项目接进来
 

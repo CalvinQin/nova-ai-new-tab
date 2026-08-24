@@ -24,6 +24,10 @@ function statusKey(status: HealthStatus) {
   return `status.${status}` as const;
 }
 
+function liveStatusKey(interval: ServerMonitorSettings['refreshInterval']) {
+  return ({ 0: 'status.liveOff', 30000: 'status.live30', 60000: 'status.live60', 300000: 'status.live300' })[interval] as 'status.liveOff' | 'status.live30' | 'status.live60' | 'status.live300';
+}
+
 export function ServerStatusPanel({ monitor, refreshingServerIds, onRefresh, onConfigure }: ServerStatusPanelProps) {
   const { t, language } = useI18n();
   const helpDialog = useRef<HTMLDialogElement>(null);
@@ -42,6 +46,7 @@ export function ServerStatusPanel({ monitor, refreshingServerIds, onRefresh, onC
         <div>
           <span className="system-pulse-kicker">{t('status.kicker')}</span>
           <h2 id="system-pulse-title">{t('status.title')}</h2>
+          <span className="system-pulse-live">{t(liveStatusKey(monitor.refreshInterval))}</span>
         </div>
         <div className="system-pulse-actions">
           <button type="button" className="system-pulse-help" aria-label={t('settings.status.guideTitle')} onClick={() => helpDialog.current?.showModal()}>

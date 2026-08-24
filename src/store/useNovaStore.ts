@@ -26,6 +26,7 @@ const defaultSettings: NovaSettings = {
   searchEngineOrder: searchEngineIds,
   serverMonitor: {
     enabled: true,
+    refreshInterval: 30_000,
     servers: [],
   },
 };
@@ -142,6 +143,11 @@ export const useNovaStore = create<NovaState>()(
           settings: {
             ...defaultSettings,
             ...saved?.settings,
+            serverMonitor: {
+              ...defaultSettings.serverMonitor,
+              ...saved?.settings?.serverMonitor,
+              servers: saved?.settings?.serverMonitor?.servers ?? [],
+            },
             aiProviderOrder: normalizeOrder(saved?.settings?.aiProviderOrder, aiProviderIds),
             searchEngineOrder: normalizeSearchOrder(saved?.settings?.searchEngineOrder),
           },

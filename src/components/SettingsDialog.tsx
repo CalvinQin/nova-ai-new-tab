@@ -43,6 +43,7 @@ import type {
   SearchEngineId,
   ServerPort,
   ServerProvider,
+  ServerRefreshInterval,
   Theme,
 } from '../types';
 import { BrandIcon } from './BrandIcon';
@@ -446,6 +447,16 @@ function StatusMonitorEditor({ settings, onUpdate, onCheckServer, checkingServer
     <SettingsPane title={t('settings.status.title')} description={t('settings.status.desc')}>
       <div className="settings-group">
         <Toggle checked={monitor.enabled} onChange={(enabled) => onUpdate({ serverMonitor: { ...monitor, enabled } })} label={t('settings.status.show')} description={t('settings.status.showDesc')} />
+      </div>
+
+      <div className="setting-row server-refresh-setting">
+        <span><strong>{t('settings.status.live')}</strong><small>{t('settings.status.liveDesc')}</small></span>
+        <label><span className="sr-only">{t('settings.status.interval')}</span><select value={monitor.refreshInterval} onChange={(event) => onUpdate({ serverMonitor: { ...monitor, refreshInterval: Number(event.target.value) as ServerRefreshInterval } })}>
+          <option value={0}>{t('settings.status.intervalOff')}</option>
+          <option value={30_000}>{t('settings.status.interval30')}</option>
+          <option value={60_000}>{t('settings.status.interval60')}</option>
+          <option value={300_000}>{t('settings.status.interval300')}</option>
+        </select></label>
       </div>
 
       <div className="server-config-list">

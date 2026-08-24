@@ -29,4 +29,8 @@ describe('server monitoring endpoint safety', () => {
       'https://api.example.com:8443/*',
     ]);
   });
+
+  it('does not turn empty or invalid endpoint fields into monitor permissions', () => {
+    expect(serverOrigins({ ...server, ports: [...server.ports, { id: 'empty', name: '', url: '', status: 'unknown' }] })).toHaveLength(3);
+  });
 });
