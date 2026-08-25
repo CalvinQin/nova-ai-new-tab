@@ -1,64 +1,50 @@
-# NOVA Chrome Web Store upload checklist / 上架操作清单
+# NOVA v0.3.1 Chrome Web Store resubmission / Chrome 应用商店重新提交清单
 
-Chrome Web Store protects its developer dashboard from browser-extension automation. Its current v2 API only uploads packages to an existing item; this account has no preconfigured Chrome Web Store OAuth client or item ID. The first draft therefore needs to be created in the dashboard. Every file and text field below is already prepared.
+The existing item was rejected for `Yellow Argon` keyword spam. This is a metadata correction, not an appeal: upload a higher-version package and replace the listing text with the focused copy in `STORE_LISTING.md`.
 
-Chrome 应用商店会阻止浏览器扩展脚本控制开发者后台；当前 v2 API 也只能向既有条目上传包，而该账号尚未配置 Chrome Web Store OAuth 客户端或条目 ID。因此首个草稿需要在后台手工创建。以下文件与文字均已准备完成。
+当前条目因 `Yellow Argon` 关键词堆砌被拒绝。本次是元数据整改，不是申诉：上传更高版本的包，并用 `STORE_LISTING.md` 中聚焦的文案替换商品详情。
 
-## 1. Create the item / 创建条目
+## 1. Package / 安装包
 
-1. Open `https://chrome.google.com/webstore/devconsole/`.
-2. Choose **Add new item / 添加新条目**.
-3. Upload the current release ZIP, `nova-ai-new-tab-v0.3.0.zip`.
+1. In the existing item, create a new draft.
+2. Upload `nova-ai-new-tab-v0.3.1.zip`.
+3. Confirm that the dashboard reports version `0.3.1`.
 
-The ZIP has `manifest.json` at its root, includes English and Simplified Chinese locales, and has already passed `unzip -t`.
+The ZIP has `manifest.json` at its root, includes English and Simplified Chinese locales, and passes `unzip -t`.
 
-## 2. Store listing / 商品详情
+## 2. Listing content / 商品详情文案
 
-On the current English listing page, paste the English **Detailed description** from `STORE_LISTING.md`; it is required even though the package already supplies the title and summary. Keep the dashboard category set to **Tools / 工具**.
+1. Set the title to **NOVA — Command New Tab**.
+2. Set the summary to **A calm, keyboard-first command bar for every new tab.**
+3. Replace the entire English detailed description with the **English listing** section in `STORE_LISTING.md`.
+4. If the dashboard has a Simplified Chinese listing language, replace its title, summary, and detailed description with the Chinese section in `STORE_LISTING.md`.
+5. Do not paste the older text or add lists of third-party sites, brands, regional locations, repeated keywords, testimonials, or ranking claims.
 
-Required assets:
-
-1. `nova-store-icon-128.png`
-2. At least one of `nova-screenshot-01-light.png` through `nova-screenshot-05-focus.png`
-
-The small promo tile and marquee tile are optional. Add the remaining screenshots and these two promo assets when a richer storefront presentation is desired:
-
-1. `nova-screenshot-02-suggestions.png`
-2. `nova-screenshot-03-command-dark.png`
-3. `nova-screenshot-04-settings.png`
-4. `nova-screenshot-05-focus.png`
-5. `nova-promo-small-440x280.png`
-6. `nova-promo-marquee-1400x560.png`
-
-The package localizes its name and summary. If the dashboard offers an additional Simplified Chinese listing language, add `zh_CN` and copy the Chinese title, summary, and detailed description from `STORE_LISTING.md`; otherwise the English detailed description is the required current field.
-
-Use:
+## 3. Assets and privacy / 素材与隐私
 
 - Category: Tools / 工具
 - Homepage: `https://github.com/CalvinQin/nova-ai-new-tab`
 - Support: `https://github.com/CalvinQin/nova-ai-new-tab/issues`
 - Privacy policy: `https://github.com/CalvinQin/nova-ai-new-tab/blob/main/PRIVACY.md`
-
-## 3. Privacy and distribution / 隐私与发布范围
-
-Use the exact single-purpose, `storage` permission, optional-host-permission, remote-code, data-handling, and reviewer text in `STORE_LISTING.md`.
-
 - Remote code: No
 - Mature content: No
 - Pricing / in-app purchases: Free / None
 - Visibility: Public
 - Regions: All supported regions
-- NOVA backend, analytics, advertising, and account system: None
 
-Do not mark prompts or searches as stored by NOVA. They are processed transiently only when the user directs NOVA to open a selected third-party destination.
+Use the privacy, optional-host-permission, data-handling, and reviewer-test text from `STORE_LISTING.md` exactly. The optional HTTP(S) permission is for user-configured System Pulse endpoints; `storage` remains the only default extension permission.
 
-## 4. Before submission / 提交审核前
+Required visual assets:
 
-- Confirm the uploaded package reports version `0.3.0`.
-- Confirm `storage` is the only default extension permission and optional HTTP/HTTPS host access is described as user-initiated Server Pulse access.
-- Confirm at least one global screenshot is visible and uncropped; add up to five when desired.
-- Confirm the English detailed description is saved. Confirm the Simplified Chinese listing only if that dashboard locale has been added.
-- Choose automatic publishing after approval unless staged publishing is specifically preferred.
-- Submit for review only after the dashboard shows no missing required field.
+1. `nova-store-icon-128.png`
+2. At least one of `nova-screenshot-01-light.png` through `nova-screenshot-05-focus.png`
 
-The final **Submit for review** action creates an external submission. Keep that final confirmation under the publisher account owner's control.
+## 4. Final human confirmation / 最终人工确认
+
+- Confirm all old brand/site lists have been deleted from every listing language and dashboard text field.
+- Confirm the uploaded package reports `0.3.1`.
+- Confirm the product description matches the actual extension functionality and privacy declarations.
+- Confirm at least one current screenshot is visible and uncropped.
+- Save the draft and submit it for review from the publisher account.
+
+The final **Submit for review** action is an external submission and remains under the publisher account owner's control.

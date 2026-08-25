@@ -1,8 +1,8 @@
 {
   "extensionName": {
-    "message": "NOVA — AI 命令新标签页"
+    "message": "NOVA — 命令新标签页"
   },
   "extensionDescription": {
-    "message": "一个安静、键盘优先的新标签页，统一连接 AI、搜索、命令与常用网站。"
+    "message": "一个安静、键盘优先的浏览器新标签命令栏。"
   }
 }

@@ -2,6 +2,13 @@
 
 All notable changes to NOVA are documented here.
 
+## [0.3.1] - 2026-08-25
+
+### Changed
+
+- Rewrote Chrome Web Store metadata around NOVA's single, keyboard-first new-tab purpose. Removed third-party brand and site lists from store-facing copy after the Yellow Argon keyword-spam rejection.
+- Simplified localized extension name and summary so the package metadata matches the focused store listing.
+
 ## [0.3.0] - 2026-08-24
 
 ### Changed

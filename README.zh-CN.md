@@ -20,7 +20,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 ## 为什么是 NOVA
 
 - **一个输入框完成所有动作：** AI、搜索、网址、计算器与斜杠命令使用同一套可预测交互。
-- **直达官方平台，不做中转代理：** 支持 ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek、Google、GitHub、YouTube 等服务。
+- **直达你选择的目标，不做中转代理：** NOVA 直接把操作交给你选择的 AI 服务、搜索引擎或网站。
 - **键盘优先：** `⌘/Ctrl K` 聚焦输入框，`Tab` 切换 AI/搜索，`⌘/Ctrl ⇧ P` 打开命令面板。
 - **属于你的快捷入口：** 最多添加 12 个网站，支持编辑、删除、撤销与拖拽排序。
 - **安静的系统脉冲：** 可选展示最多 2 台服务器、每台最多 3 项端口/端点健康度，内置厂商预设、真实 HTTP(S) 延迟和可见标签页实时刷新。
@@ -33,7 +33,7 @@ NOVA 把每个浏览器新标签页变成一个统一入口：询问 AI、搜索
 
 ### 从 Release 安装
 
-1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.3.0.zip`。
+1. 在 [Releases](../../releases) 下载 `nova-ai-new-tab-v0.3.1.zip`。
 2. 解压文件。
 3. 在 Chrome、Edge、Brave 或其他 Chromium 浏览器打开 `chrome://extensions`。
 4. 开启右上角的 **开发者模式**。
@@ -51,17 +51,13 @@ npm run build
 
 构建完成后，在 `chrome://extensions` 中加载生成的 `dist/` 文件夹。
 
-## 支持的平台
+## 支持的目标
 
-| AI | 搜索 |
-| --- | --- |
-| ChatGPT、Claude、Gemini、Perplexity、Grok、DeepSeek、豆包、Kimi、通义千问、腾讯元宝 | Google、百度、Bing、DuckDuckGo、Brave、YouTube、GitHub、Reddit、哔哩哔哩、知乎、小红书、淘宝 |
-
-有稳定查询链接的平台会直接接收内容；没有稳定链接的平台由 NOVA 复制提示词并打开官网，用户自行粘贴，整个过程不经过 NOVA 服务器。
+可从内置 AI 与网页搜索目标中选择，也可以添加自己的快捷网站。有稳定查询链接的平台会直接接收内容；没有稳定链接的平台由 NOVA 复制提示词并打开你选择的网站，用户自行粘贴，整个过程不经过 NOVA 服务器。
 
 ## 常用命令
 
-输入 `/` 即可发现 `/chatgpt`、`/google`、`/youtube`、`/github`、`/settings`、`/theme`、`/apps`、`/focus` 等命令。
+输入 `/` 即可发现设置、外观、快捷方式、专注模式和已配置目标的命令。
 
 | 快捷键 | 功能 |
 | --- | --- |

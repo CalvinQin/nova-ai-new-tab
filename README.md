@@ -20,7 +20,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 ## Why NOVA
 
 - **One command bar:** AI, search, URLs, calculations, and slash commands share one predictable input.
-- **Real destinations, no proxy:** NOVA hands work to ChatGPT, Claude, Gemini, Perplexity, Grok, DeepSeek, Google, GitHub, YouTube, and more.
+- **Your chosen destinations, no proxy:** NOVA hands work directly to the AI service, search engine, or website you select.
 - **Built for the keyboard:** `⌘/Ctrl K` focuses the launcher, `Tab` switches AI/Search, and `⌘/Ctrl ⇧ P` opens the command palette.
 - **Your own launchpad:** add, edit, remove, undo, and drag up to 12 quick links.
 - **A quiet system pulse:** optionally monitor up to two of your servers and three endpoints per server, with named provider presets, real HTTP(S) latency, and visible-tab live refresh.
@@ -33,7 +33,7 @@ NOVA turns every browser new tab into one universal launch surface. Ask an AI, s
 
 ### From a release
 
-1. Download `nova-ai-new-tab-v0.3.0.zip` from [Releases](../../releases).
+1. Download `nova-ai-new-tab-v0.3.1.zip` from [Releases](../../releases).
 2. Unzip it.
 3. Open `chrome://extensions` in Chrome, Edge, Brave, or another Chromium browser.
 4. Enable **Developer mode**.
@@ -53,15 +53,11 @@ Then load the generated `dist/` folder from `chrome://extensions`.
 
 ## Supported destinations
 
-| AI | Search |
-| --- | --- |
-| ChatGPT, Claude, Gemini, Perplexity, Grok, DeepSeek, 豆包, Kimi, 通义千问, 腾讯元宝 | Google, 百度, Bing, DuckDuckGo, Brave, YouTube, GitHub, Reddit, Bilibili, Zhihu, Xiaohongshu, Taobao |
-
-Providers with a stable query URL receive the prompt directly. For providers without one, NOVA copies the prompt and opens the official site so you can paste it yourself.
+Choose from built-in AI and web-search destinations, or add your own quick links. Providers with a stable query URL receive the prompt directly. For providers without one, NOVA copies the prompt and opens the chosen site so you can paste it yourself.
 
 ## Commands
 
-Type `/` to discover commands such as `/chatgpt`, `/google`, `/youtube`, `/github`, `/settings`, `/theme`, `/apps`, and `/focus`.
+Type `/` to discover commands for settings, appearance, shortcuts, Focus Mode, and your configured destinations.
 
 | Shortcut | Action |
 | --- | --- |
